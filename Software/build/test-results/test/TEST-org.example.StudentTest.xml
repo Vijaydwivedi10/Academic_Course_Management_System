@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="org.example.StudentTest" tests="6" skipped="0" failures="0" errors="0" timestamp="2023-03-07T22:01:52" hostname="VIJAY" time="0.569">
+  <properties/>
+  <testcase name="testCase1()" classname="org.example.StudentTest" time="0.084"/>
+  <testcase name="testCase2()" classname="org.example.StudentTest" time="0.115"/>
+  <testcase name="testCase3()" classname="org.example.StudentTest" time="0.035"/>
+  <testcase name="testCase4()" classname="org.example.StudentTest" time="0.059"/>
+  <testcase name="testCase5()" classname="org.example.StudentTest" time="0.235"/>
+  <testcase name="testTranscriptGenerator()" classname="org.example.StudentTest" time="0.041"/>
+  <system-out><![CDATA[Grade with value -1 inserted successfully.
+Grade with value -1 inserted successfully.
+SQL error occurred: ERROR: duplicate key value violates unique constraint "grades_pkey"
+  Detail: Key (email, course_id, semester)=(john@example.com, 105, 14) already exists.
+No course with grade -1 found for email: e and course_id: 105
+Course ID: 101 | Semester: 1 | Grade: -1
+Course ID: 102 | Semester: 1 | Grade: -1
+Course ID: 103 | Semester: 1 | Grade: -1
+Course ID: 104 | Semester: 1 | Grade: -1
+Course ID: 105 | Semester: 9 | Grade: -1
+Course ID: 105 | Semester: 10 | Grade: -1
+Course ID: 105 | Semester: 11 | Grade: -1
+Course ID: 105 | Semester: 12 | Grade: -1
+Course ID: 105 | Semester: 14 | Grade: -1
+User details updated successfully
+Transcript generated successfully.
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

@@ -1,0 +1,954 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Queries.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Tests in 'fuckoff.test' Coverage Results, Tests in 'org.example' Coverage Results, StudentTest.testCase1 Coverage Results, InstructorTest.testCase1 Coverage Results, AcademicsTest.testCase1 Coverage Results</a> &gt; <a href="index.source.html" class="el_package">org.example</a> &gt; <span class="el_source">Queries.java</span></div><h1>Queries.java</h1><pre class="source lang-java linenums">package org.example;
+import java.sql.*;
+import java.util.*;
+
+<span class="nc" id="L5">class Queries {</span>
+
+    static boolean Login_val(String username, String password, String role) {
+<span class="nc" id="L8">        Connection conn = null;</span>
+<span class="nc" id="L9">        Statement stmt = null;</span>
+        try {
+<span class="nc" id="L11">            conn = ConnectionUtil.getConnection();</span>
+<span class="nc" id="L12">            stmt = conn.createStatement();</span>
+            // --------------------
+
+<span class="nc" id="L15">            PreparedStatement pstmt = conn.prepareStatement(&quot;select role from users where email=? and password=?;&quot;);</span>
+<span class="nc" id="L16">            pstmt.setString(1, username);</span>
+<span class="nc" id="L17">            pstmt.setString(2, password);</span>
+<span class="nc" id="L18">            ResultSet rs = pstmt.executeQuery();</span>
+
+<span class="nc" id="L20">            String role2 = &quot;&quot;;</span>
+<span class="nc bnc" id="L21" title="All 2 branches missed.">            if (rs.next()) {</span>
+<span class="nc" id="L22">                role2 = rs.getString(&quot;role&quot;);</span>
+            }
+<span class="nc bnc" id="L24" title="All 2 branches missed.">            if (role2.equals(role)) {</span>
+<span class="nc" id="L25">                return true;</span>
+            } else {
+<span class="nc" id="L27">                return false;</span>
+            }
+
+            // -------------------------
+
+<span class="nc" id="L32">        } catch (SQLException se) {</span>
+<span class="nc" id="L33">            se.printStackTrace();</span>
+<span class="nc" id="L34">        } catch (Exception e) {</span>
+<span class="nc" id="L35">            e.printStackTrace();</span>
+        } finally {
+            try {
+<span class="nc bnc" id="L38" title="All 2 branches missed.">                if (stmt != null)</span>
+<span class="nc" id="L39">                    stmt.close();</span>
+<span class="nc" id="L40">            } catch (SQLException se2) {</span>
+<span class="nc" id="L41">            }</span>
+            try {
+<span class="nc bnc" id="L43" title="All 2 branches missed.">                if (conn != null)</span>
+<span class="nc" id="L44">                    conn.close();</span>
+<span class="nc" id="L45">            } catch (SQLException se) {</span>
+<span class="nc" id="L46">                se.printStackTrace();</span>
+<span class="nc" id="L47">            }</span>
+        }
+<span class="nc" id="L49">        return false;</span>
+
+    }
+
+    static void insert_Course() {
+        // Connection conn = null;
+        // PreparedStatement pstmt = null;
+        // try {
+        // conn = ConnectionUtil.getConnection();
+        // pstmt = conn.prepareStatement(
+        // &quot;INSERT INTO course_catalog (course_id, course_name, credit_structure) VALUES
+        // (?, ?, ?)&quot;);
+
+        // Scanner input = new Scanner(System.in);
+
+        // System.out.print(&quot;Enter the course ID: &quot;);
+        // int course_id = input.nextInt();
+        // input.nextLine(); // Consume the new line character
+
+        // System.out.print(&quot;Enter the course name: &quot;);
+        // String course_name = input.nextLine();
+
+        // System.out.print(&quot;Enter the credit structure: &quot;);
+        // String credit_structure = input.nextLine();
+
+        // pstmt.setInt(1, course_id);
+        // pstmt.setString(2, course_name);
+        // pstmt.setString(3, credit_structure);
+
+        // pstmt.executeUpdate();
+
+        // System.out.println(&quot;Data inserted successfully!&quot;);
+
+        // input.close();
+        // pstmt.close();
+        // conn.close();
+        // } catch (SQLException se) {
+        // se.printStackTrace();
+        // } catch (Exception e) {
+        // e.printStackTrace();
+        // } finally {
+        // try {
+        // if (pstmt != null)
+        // pstmt.close();
+        // } catch (SQLException se2) {
+        // }
+        // try {
+        // if (conn != null)
+        // conn.close();
+        // } catch (SQLException se) {
+        // se.printStackTrace();
+        // }
+        // }
+<span class="nc" id="L102">    }</span>
+
+    static void show_Courses() {
+<span class="nc" id="L105">        Connection conn = null;</span>
+<span class="nc" id="L106">        Statement stmt = null;</span>
+        try {
+<span class="nc" id="L108">            conn = ConnectionUtil.getConnection();</span>
+<span class="nc" id="L109">            stmt = conn.createStatement();</span>
+
+<span class="nc" id="L111">            ResultSet rs = stmt.executeQuery(&quot;SELECT * FROM course_catalog&quot;);</span>
+
+<span class="nc bnc" id="L113" title="All 2 branches missed.">            while (rs.next()) {</span>
+<span class="nc" id="L114">                int course_id = rs.getInt(&quot;course_id&quot;);</span>
+<span class="nc" id="L115">                String course_name = rs.getString(&quot;course_name&quot;);</span>
+<span class="nc" id="L116">                String credit_structure = rs.getString(&quot;credit_structure&quot;);</span>
+
+<span class="nc" id="L118">                System.out.println(&quot;\nCourse ID: &quot; + course_id);</span>
+<span class="nc" id="L119">                System.out.println(&quot;Course Name: &quot; + course_name);</span>
+<span class="nc" id="L120">                System.out.println(&quot;Credit Structure: &quot; + credit_structure);</span>
+<span class="nc" id="L121">                System.out.println();</span>
+<span class="nc" id="L122">            }</span>
+
+<span class="nc" id="L124">            stmt.close();</span>
+<span class="nc" id="L125">            conn.close();</span>
+<span class="nc" id="L126">        } catch (SQLException se) {</span>
+<span class="nc" id="L127">            se.printStackTrace();</span>
+<span class="nc" id="L128">        } catch (Exception e) {</span>
+<span class="nc" id="L129">            e.printStackTrace();</span>
+        } finally {
+            try {
+<span class="nc bnc" id="L132" title="All 2 branches missed.">                if (stmt != null)</span>
+<span class="nc" id="L133">                    stmt.close();</span>
+<span class="nc" id="L134">            } catch (SQLException se2) {</span>
+<span class="nc" id="L135">            }</span>
+            try {
+<span class="nc bnc" id="L137" title="All 2 branches missed.">                if (conn != null)</span>
+<span class="nc" id="L138">                    conn.close();</span>
+<span class="nc" id="L139">            } catch (SQLException se) {</span>
+<span class="nc" id="L140">                se.printStackTrace();</span>
+<span class="nc" id="L141">            }</span>
+        }
+<span class="nc" id="L143">    }</span>
+
+    static void Insert_Prerequisite() {
+<span class="nc" id="L146">        Connection conn = null;</span>
+<span class="nc" id="L147">        PreparedStatement pstmt = null;</span>
+        try {
+<span class="nc" id="L149">            conn = ConnectionUtil.getConnection();</span>
+<span class="nc" id="L150">            pstmt = conn</span>
+<span class="nc" id="L151">                    .prepareStatement(&quot;INSERT INTO prerequisites (course_id, prerequisite_course_id) VALUES (?, ?)&quot;);</span>
+
+<span class="nc" id="L153">            Scanner input = new Scanner(System.in);</span>
+
+<span class="nc" id="L155">            System.out.print(&quot;Enter The course_id: &quot;);</span>
+<span class="nc" id="L156">            int course_id = input.nextInt();</span>
+<span class="nc" id="L157">            input.nextLine(); // Consume the new line character</span>
+
+<span class="nc" id="L159">            System.out.print(&quot;Enter The prerequisite_course_id: &quot;);</span>
+<span class="nc" id="L160">            int prerequisite_course_id = input.nextInt();</span>
+<span class="nc" id="L161">            input.nextLine(); // Consume the new line character</span>
+
+<span class="nc" id="L163">            pstmt.setInt(1, course_id);</span>
+<span class="nc" id="L164">            pstmt.setInt(2, prerequisite_course_id);</span>
+
+<span class="nc" id="L166">            pstmt.executeUpdate();</span>
+
+<span class="nc" id="L168">            App.main(null);</span>
+
+<span class="nc" id="L170">            input.close();</span>
+<span class="nc" id="L171">            pstmt.close();</span>
+<span class="nc" id="L172">            conn.close();</span>
+<span class="nc" id="L173">        } catch (SQLException se) {</span>
+<span class="nc" id="L174">            se.printStackTrace();</span>
+<span class="nc" id="L175">        } catch (Exception e) {</span>
+<span class="nc" id="L176">            e.printStackTrace();</span>
+        } finally {
+            try {
+<span class="nc bnc" id="L179" title="All 2 branches missed.">                if (pstmt != null)</span>
+<span class="nc" id="L180">                    pstmt.close();</span>
+<span class="nc" id="L181">            } catch (SQLException se2) {</span>
+<span class="nc" id="L182">            }</span>
+            try {
+<span class="nc bnc" id="L184" title="All 2 branches missed.">                if (conn != null)</span>
+<span class="nc" id="L185">                    conn.close();</span>
+<span class="nc" id="L186">            } catch (SQLException se) {</span>
+<span class="nc" id="L187">                se.printStackTrace();</span>
+<span class="nc" id="L188">            }</span>
+        }
+<span class="nc" id="L190">    }</span>
+
+    static void Show_Prerequisites() {
+<span class="nc" id="L193">        Connection conn = null;</span>
+<span class="nc" id="L194">        Statement stmt = null;</span>
+        try {
+<span class="nc" id="L196">            conn = ConnectionUtil.getConnection();</span>
+<span class="nc" id="L197">            stmt = conn.createStatement();</span>
+
+<span class="nc" id="L199">            ResultSet rs = stmt.executeQuery(&quot;&quot;);</span>
+
+            try {
+<span class="nc" id="L202">                rs = stmt.executeQuery(&quot;SELECT * FROM prerequisites&quot;);</span>
+<span class="nc" id="L203">            } catch (Exception e) {</span>
+
+<span class="nc" id="L205">            }</span>
+
+<span class="nc bnc" id="L207" title="All 2 branches missed.">            while (rs.next()) {</span>
+<span class="nc" id="L208">                int course_id = rs.getInt(&quot;course_id&quot;);</span>
+<span class="nc" id="L209">                int prerequisite_course_id = rs.getInt(&quot;prerequisite_course_id&quot;);</span>
+
+<span class="nc" id="L211">                System.out.println(&quot;\ncourse_id: &quot; + course_id);</span>
+<span class="nc" id="L212">                System.out.println(&quot;prerequisite_course_id: &quot; + prerequisite_course_id);</span>
+<span class="nc" id="L213">                System.out.println(&quot;\n&quot;);</span>
+<span class="nc" id="L214">            }</span>
+
+<span class="nc" id="L216">            stmt.close();</span>
+<span class="nc" id="L217">            conn.close();</span>
+<span class="nc" id="L218">        } catch (SQLException se) {</span>
+<span class="nc" id="L219">            se.printStackTrace();</span>
+<span class="nc" id="L220">        } catch (Exception e) {</span>
+<span class="nc" id="L221">            e.printStackTrace();</span>
+        } finally {
+            try {
+<span class="nc bnc" id="L224" title="All 2 branches missed.">                if (stmt != null)</span>
+<span class="nc" id="L225">                    stmt.close();</span>
+<span class="nc" id="L226">            } catch (SQLException se2) {</span>
+<span class="nc" id="L227">            }</span>
+            try {
+<span class="nc bnc" id="L229" title="All 2 branches missed.">                if (conn != null)</span>
+<span class="nc" id="L230">                    conn.close();</span>
+<span class="nc" id="L231">            } catch (SQLException se) {</span>
+<span class="nc" id="L232">                se.printStackTrace();</span>
+<span class="nc" id="L233">            }</span>
+        }
+<span class="nc" id="L235">    }</span>
+
+    static void Insert_course_curriculum() {
+<span class="nc" id="L238">        Connection conn = null;</span>
+<span class="nc" id="L239">        PreparedStatement pstmt = null;</span>
+        try {
+<span class="nc" id="L241">            conn = ConnectionUtil.getConnection();</span>
+<span class="nc" id="L242">            pstmt = conn.prepareStatement(</span>
+                    &quot;INSERT INTO course_curriculum (batch, semester, department, course_id, course_type) VALUES (?, ?, ?, ?, ?)&quot;);
+
+<span class="nc" id="L245">            Scanner input = new Scanner(System.in);</span>
+
+<span class="nc" id="L247">            System.out.print(&quot;Enter The batch: &quot;);</span>
+<span class="nc" id="L248">            int batch = input.nextInt();</span>
+
+<span class="nc" id="L250">            System.out.print(&quot;Enter The semester: &quot;);</span>
+<span class="nc" id="L251">            int semester = input.nextInt();</span>
+<span class="nc" id="L252">            input.nextLine(); // Consume the new line character</span>
+
+<span class="nc" id="L254">            System.out.print(&quot;Enter The department: &quot;);</span>
+<span class="nc" id="L255">            String department = input.nextLine();</span>
+
+<span class="nc" id="L257">            System.out.print(&quot;Enter The course_id: &quot;);</span>
+<span class="nc" id="L258">            int course_id = input.nextInt();</span>
+<span class="nc" id="L259">            input.nextLine(); // Consume the new line character</span>
+
+<span class="nc" id="L261">            System.out.print(&quot;Enter The course_type: &quot;);</span>
+<span class="nc" id="L262">            String course_type = input.nextLine();</span>
+
+<span class="nc" id="L264">            pstmt.setInt(1, batch);</span>
+<span class="nc" id="L265">            pstmt.setInt(2, semester);</span>
+<span class="nc" id="L266">            pstmt.setString(3, department);</span>
+<span class="nc" id="L267">            pstmt.setInt(4, course_id);</span>
+<span class="nc" id="L268">            pstmt.setString(5, course_type);</span>
+
+<span class="nc" id="L270">            pstmt.executeUpdate();</span>
+
+<span class="nc" id="L272">            App.main(null);</span>
+
+<span class="nc" id="L274">            input.close();</span>
+<span class="nc" id="L275">            pstmt.close();</span>
+<span class="nc" id="L276">            conn.close();</span>
+<span class="nc" id="L277">        } catch (SQLException se) {</span>
+<span class="nc" id="L278">            se.printStackTrace();</span>
+<span class="nc" id="L279">        } catch (Exception e) {</span>
+<span class="nc" id="L280">            e.printStackTrace();</span>
+        } finally {
+            try {
+<span class="nc bnc" id="L283" title="All 2 branches missed.">                if (pstmt != null)</span>
+<span class="nc" id="L284">                    pstmt.close();</span>
+<span class="nc" id="L285">            } catch (SQLException se2) {</span>
+<span class="nc" id="L286">            }</span>
+            try {
+<span class="nc bnc" id="L288" title="All 2 branches missed.">                if (conn != null)</span>
+<span class="nc" id="L289">                    conn.close();</span>
+<span class="nc" id="L290">            } catch (SQLException se) {</span>
+<span class="nc" id="L291">                se.printStackTrace();</span>
+<span class="nc" id="L292">            }</span>
+        }
+<span class="nc" id="L294">    }</span>
+
+    static void Show_course_curriculum() {
+<span class="nc" id="L297">        Connection conn = null;</span>
+<span class="nc" id="L298">        Statement stmt = null;</span>
+        try {
+<span class="nc" id="L300">            conn = ConnectionUtil.getConnection();</span>
+<span class="nc" id="L301">            stmt = conn.createStatement();</span>
+
+<span class="nc" id="L303">            ResultSet rs = stmt.executeQuery(&quot;&quot;);</span>
+
+            try {
+<span class="nc" id="L306">                rs = stmt.executeQuery(&quot;SELECT * FROM course_curriculum&quot;);</span>
+<span class="nc" id="L307">            } catch (Exception e) {</span>
+
+<span class="nc" id="L309">            }</span>
+
+<span class="nc bnc" id="L311" title="All 2 branches missed.">            while (rs.next()) {</span>
+<span class="nc" id="L312">                int batch = rs.getInt(&quot;batch&quot;);</span>
+<span class="nc" id="L313">                int semester = rs.getInt(&quot;semester&quot;);</span>
+<span class="nc" id="L314">                String department = rs.getString(&quot;department&quot;);</span>
+<span class="nc" id="L315">                int course_id = rs.getInt(&quot;course_id&quot;);</span>
+<span class="nc" id="L316">                String course_type = rs.getString(&quot;course_type&quot;);</span>
+
+<span class="nc" id="L318">                System.out.println(&quot;\nbatch: &quot; + batch);</span>
+<span class="nc" id="L319">                System.out.println(&quot;semester: &quot; + semester);</span>
+<span class="nc" id="L320">                System.out.println(&quot;department: &quot; + department);</span>
+<span class="nc" id="L321">                System.out.println(&quot;course_id: &quot; + course_id);</span>
+<span class="nc" id="L322">                System.out.println(&quot;course_type: &quot; + course_type);</span>
+<span class="nc" id="L323">                System.out.println(&quot;\n&quot;);</span>
+<span class="nc" id="L324">            }</span>
+
+<span class="nc" id="L326">            stmt.close();</span>
+<span class="nc" id="L327">            conn.close();</span>
+<span class="nc" id="L328">        } catch (SQLException se) {</span>
+<span class="nc" id="L329">            se.printStackTrace();</span>
+<span class="nc" id="L330">        } catch (Exception e) {</span>
+<span class="nc" id="L331">            e.printStackTrace();</span>
+        } finally {
+            try {
+<span class="nc bnc" id="L334" title="All 2 branches missed.">                if (stmt != null)</span>
+<span class="nc" id="L335">                    stmt.close();</span>
+<span class="nc" id="L336">            } catch (SQLException se2) {</span>
+<span class="nc" id="L337">            }</span>
+            try {
+<span class="nc bnc" id="L339" title="All 2 branches missed.">                if (conn != null)</span>
+<span class="nc" id="L340">                    conn.close();</span>
+<span class="nc" id="L341">            } catch (SQLException se) {</span>
+<span class="nc" id="L342">                se.printStackTrace();</span>
+<span class="nc" id="L343">            }</span>
+        }
+<span class="nc" id="L345">    }</span>
+
+    static void Insert_users() {
+<span class="nc" id="L348">        Connection conn = null;</span>
+<span class="nc" id="L349">        PreparedStatement pstmt = null;</span>
+        try {
+<span class="nc" id="L351">            conn = ConnectionUtil.getConnection();</span>
+<span class="nc" id="L352">            pstmt = conn.prepareStatement(</span>
+                    &quot;INSERT INTO users (email, password, name, address, phone, role, token) VALUES (?, ?, ?, ?, ?, ?, ?)&quot;);
+
+<span class="nc" id="L355">            Scanner input = new Scanner(System.in);</span>
+
+<span class="nc" id="L357">            System.out.print(&quot;Enter The email: &quot;);</span>
+<span class="nc" id="L358">            String email = input.nextLine();</span>
+
+<span class="nc" id="L360">            System.out.print(&quot;Enter The password: &quot;);</span>
+<span class="nc" id="L361">            String password = input.nextLine();</span>
+
+<span class="nc" id="L363">            System.out.print(&quot;Enter The name: &quot;);</span>
+<span class="nc" id="L364">            String name = input.nextLine();</span>
+
+<span class="nc" id="L366">            System.out.print(&quot;Enter The address: &quot;);</span>
+<span class="nc" id="L367">            String address = input.nextLine();</span>
+
+<span class="nc" id="L369">            System.out.print(&quot;Enter The phone: &quot;);</span>
+<span class="nc" id="L370">            String phone = input.nextLine();</span>
+
+<span class="nc" id="L372">            System.out.print(&quot;Enter The role: &quot;);</span>
+<span class="nc" id="L373">            String role = input.nextLine();</span>
+
+<span class="nc" id="L375">            System.out.print(&quot;Enter The token: &quot;);</span>
+<span class="nc" id="L376">            String token = input.nextLine();</span>
+
+<span class="nc" id="L378">            pstmt.setString(1, email);</span>
+<span class="nc" id="L379">            pstmt.setString(2, password);</span>
+<span class="nc" id="L380">            pstmt.setString(3, name);</span>
+<span class="nc" id="L381">            pstmt.setString(4, address);</span>
+<span class="nc" id="L382">            pstmt.setString(5, phone);</span>
+<span class="nc" id="L383">            pstmt.setString(6, role);</span>
+<span class="nc" id="L384">            pstmt.setString(7, token);</span>
+
+<span class="nc" id="L386">            pstmt.executeUpdate();</span>
+
+<span class="nc" id="L388">            App.main(null);</span>
+
+<span class="nc" id="L390">            input.close();</span>
+<span class="nc" id="L391">            pstmt.close();</span>
+<span class="nc" id="L392">            conn.close();</span>
+<span class="nc" id="L393">        } catch (SQLException se) {</span>
+<span class="nc" id="L394">            se.printStackTrace();</span>
+<span class="nc" id="L395">        } catch (Exception e) {</span>
+<span class="nc" id="L396">            e.printStackTrace();</span>
+        } finally {
+            try {
+<span class="nc bnc" id="L399" title="All 2 branches missed.">                if (pstmt != null)</span>
+<span class="nc" id="L400">                    pstmt.close();</span>
+<span class="nc" id="L401">            } catch (SQLException se2) {</span>
+<span class="nc" id="L402">            }</span>
+            try {
+<span class="nc bnc" id="L404" title="All 2 branches missed.">                if (conn != null)</span>
+<span class="nc" id="L405">                    conn.close();</span>
+<span class="nc" id="L406">            } catch (SQLException se) {</span>
+<span class="nc" id="L407">                se.printStackTrace();</span>
+<span class="nc" id="L408">            }</span>
+        }
+<span class="nc" id="L410">    }</span>
+
+    static void Show_users() {
+<span class="nc" id="L413">        Connection conn = null;</span>
+<span class="nc" id="L414">        Statement stmt = null;</span>
+        try {
+<span class="nc" id="L416">            conn = ConnectionUtil.getConnection();</span>
+<span class="nc" id="L417">            stmt = conn.createStatement();</span>
+
+<span class="nc" id="L419">            ResultSet rs = stmt.executeQuery(&quot;&quot;);</span>
+
+            try {
+<span class="nc" id="L422">                rs = stmt.executeQuery(&quot;SELECT * FROM users&quot;);</span>
+<span class="nc" id="L423">            } catch (Exception e) {</span>
+
+<span class="nc" id="L425">            }</span>
+
+<span class="nc bnc" id="L427" title="All 2 branches missed.">            while (rs.next()) {</span>
+<span class="nc" id="L428">                String email = rs.getString(&quot;email&quot;);</span>
+<span class="nc" id="L429">                String password = rs.getString(&quot;password&quot;);</span>
+<span class="nc" id="L430">                String name = rs.getString(&quot;name&quot;);</span>
+<span class="nc" id="L431">                String address = rs.getString(&quot;address&quot;);</span>
+<span class="nc" id="L432">                String phone = rs.getString(&quot;phone&quot;);</span>
+<span class="nc" id="L433">                String role = rs.getString(&quot;role&quot;);</span>
+<span class="nc" id="L434">                String token = rs.getString(&quot;token&quot;);</span>
+
+<span class="nc" id="L436">                System.out.println(&quot;\nemail: &quot; + email);</span>
+<span class="nc" id="L437">                System.out.println(&quot;password: &quot; + password);</span>
+<span class="nc" id="L438">                System.out.println(&quot;name: &quot; + name);</span>
+<span class="nc" id="L439">                System.out.println(&quot;address: &quot; + address);</span>
+<span class="nc" id="L440">                System.out.println(&quot;phone: &quot; + phone);</span>
+<span class="nc" id="L441">                System.out.println(&quot;role: &quot; + role);</span>
+<span class="nc" id="L442">                System.out.println(&quot;token: &quot; + token);</span>
+<span class="nc" id="L443">                System.out.println(&quot;\n&quot;);</span>
+<span class="nc" id="L444">            }</span>
+
+<span class="nc" id="L446">            stmt.close();</span>
+<span class="nc" id="L447">            conn.close();</span>
+<span class="nc" id="L448">        } catch (SQLException se) {</span>
+<span class="nc" id="L449">            se.printStackTrace();</span>
+<span class="nc" id="L450">        } catch (Exception e) {</span>
+<span class="nc" id="L451">            e.printStackTrace();</span>
+        } finally {
+            try {
+<span class="nc bnc" id="L454" title="All 2 branches missed.">                if (stmt != null)</span>
+<span class="nc" id="L455">                    stmt.close();</span>
+<span class="nc" id="L456">            } catch (SQLException se2) {</span>
+<span class="nc" id="L457">            }</span>
+            try {
+<span class="nc bnc" id="L459" title="All 2 branches missed.">                if (conn != null)</span>
+<span class="nc" id="L460">                    conn.close();</span>
+<span class="nc" id="L461">            } catch (SQLException se) {</span>
+<span class="nc" id="L462">                se.printStackTrace();</span>
+<span class="nc" id="L463">            }</span>
+        }
+<span class="nc" id="L465">    }</span>
+
+    static void insert_instructor() {
+<span class="nc" id="L468">        Connection conn = null;</span>
+<span class="nc" id="L469">        PreparedStatement pstmt = null;</span>
+        try {
+<span class="nc" id="L471">            conn = ConnectionUtil.getConnection();</span>
+<span class="nc" id="L472">            pstmt = conn.prepareStatement(&quot;INSERT INTO instructors (department, email, joining_date) VALUES (?, ?, ?)&quot;);</span>
+
+<span class="nc" id="L474">            Scanner input = new Scanner(System.in);</span>
+
+<span class="nc" id="L476">            System.out.print(&quot;Enter the department: &quot;);</span>
+<span class="nc" id="L477">            String department = input.nextLine();</span>
+
+<span class="nc" id="L479">            System.out.print(&quot;Enter the email: &quot;);</span>
+<span class="nc" id="L480">            String email = input.nextLine();</span>
+
+<span class="nc" id="L482">            System.out.print(&quot;Enter the joining date (yyyy-mm-dd): &quot;);</span>
+<span class="nc" id="L483">            String joining_date = input.nextLine();</span>
+
+<span class="nc" id="L485">            pstmt.setString(1, department);</span>
+<span class="nc" id="L486">            pstmt.setString(2, email);</span>
+<span class="nc" id="L487">            pstmt.setDate(3, java.sql.Date.valueOf(joining_date));</span>
+
+<span class="nc" id="L489">            pstmt.executeUpdate();</span>
+
+<span class="nc" id="L491">            System.out.println(&quot;Instructor added successfully!&quot;);</span>
+
+<span class="nc" id="L493">            input.close();</span>
+<span class="nc" id="L494">            pstmt.close();</span>
+<span class="nc" id="L495">            conn.close();</span>
+<span class="nc" id="L496">        } catch (SQLException se) {</span>
+<span class="nc" id="L497">            se.printStackTrace();</span>
+<span class="nc" id="L498">        } catch (Exception e) {</span>
+<span class="nc" id="L499">            e.printStackTrace();</span>
+        } finally {
+            try {
+<span class="nc bnc" id="L502" title="All 2 branches missed.">                if (pstmt != null)</span>
+<span class="nc" id="L503">                    pstmt.close();</span>
+<span class="nc" id="L504">            } catch (SQLException se2) {</span>
+<span class="nc" id="L505">            }</span>
+            try {
+<span class="nc bnc" id="L507" title="All 2 branches missed.">                if (conn != null)</span>
+<span class="nc" id="L508">                    conn.close();</span>
+<span class="nc" id="L509">            } catch (SQLException se) {</span>
+<span class="nc" id="L510">                se.printStackTrace();</span>
+<span class="nc" id="L511">            }</span>
+        }
+<span class="nc" id="L513">    }</span>
+
+    static void show_instructors() {
+<span class="nc" id="L516">        Connection conn = null;</span>
+<span class="nc" id="L517">        Statement stmt = null;</span>
+        try {
+<span class="nc" id="L519">            conn = ConnectionUtil.getConnection();</span>
+<span class="nc" id="L520">            stmt = conn.createStatement();</span>
+
+<span class="nc" id="L522">            ResultSet rs = stmt.executeQuery(&quot;&quot;);</span>
+
+            try {
+<span class="nc" id="L525">                rs = stmt.executeQuery(&quot;SELECT * FROM instructors&quot;);</span>
+<span class="nc" id="L526">            } catch (Exception e) {</span>
+
+<span class="nc" id="L528">            }</span>
+
+<span class="nc bnc" id="L530" title="All 2 branches missed.">            while (rs.next()) {</span>
+<span class="nc" id="L531">                int instructor_id = rs.getInt(&quot;instructor_id&quot;);</span>
+<span class="nc" id="L532">                String department = rs.getString(&quot;department&quot;);</span>
+<span class="nc" id="L533">                String email = rs.getString(&quot;email&quot;);</span>
+<span class="nc" id="L534">                String joining_date = rs.getString(&quot;joining_date&quot;);</span>
+
+<span class="nc" id="L536">                System.out.println(&quot;\nInstructor ID: &quot; + instructor_id);</span>
+<span class="nc" id="L537">                System.out.println(&quot;Department: &quot; + department);</span>
+<span class="nc" id="L538">                System.out.println(&quot;Email: &quot; + email);</span>
+<span class="nc" id="L539">                System.out.println(&quot;Joining Date: &quot; + joining_date);</span>
+<span class="nc" id="L540">                System.out.println(&quot;\n&quot;);</span>
+<span class="nc" id="L541">            }</span>
+
+<span class="nc" id="L543">            stmt.close();</span>
+<span class="nc" id="L544">            conn.close();</span>
+<span class="nc" id="L545">        } catch (SQLException se) {</span>
+<span class="nc" id="L546">            se.printStackTrace();</span>
+<span class="nc" id="L547">        } catch (Exception e) {</span>
+<span class="nc" id="L548">            e.printStackTrace();</span>
+        } finally {
+            try {
+<span class="nc bnc" id="L551" title="All 2 branches missed.">                if (stmt != null)</span>
+<span class="nc" id="L552">                    stmt.close();</span>
+<span class="nc" id="L553">            } catch (SQLException se2) {</span>
+<span class="nc" id="L554">            }</span>
+            try {
+<span class="nc bnc" id="L556" title="All 2 branches missed.">                if (conn != null)</span>
+<span class="nc" id="L557">                    conn.close();</span>
+<span class="nc" id="L558">            } catch (SQLException se) {</span>
+<span class="nc" id="L559">                se.printStackTrace();</span>
+<span class="nc" id="L560">            }</span>
+        }
+<span class="nc" id="L562">    }</span>
+
+    static void insert_students() {
+<span class="nc" id="L565">        Connection conn = null;</span>
+<span class="nc" id="L566">        PreparedStatement pstmt = null;</span>
+        try {
+<span class="nc" id="L568">            conn = ConnectionUtil.getConnection();</span>
+<span class="nc" id="L569">            pstmt = conn.prepareStatement(</span>
+                    &quot;INSERT INTO students (email, entry_number, batch, department, curr_sem, cgpa) VALUES (?, ?, ?, ?, ?, ?)&quot;);
+
+<span class="nc" id="L572">            Scanner input = new Scanner(System.in);</span>
+
+<span class="nc" id="L574">            System.out.print(&quot;Enter the student's email: &quot;);</span>
+<span class="nc" id="L575">            String email = input.nextLine();</span>
+
+<span class="nc" id="L577">            System.out.print(&quot;Enter the student's entry number: &quot;);</span>
+<span class="nc" id="L578">            String entry_number = input.nextLine();</span>
+
+<span class="nc" id="L580">            System.out.print(&quot;Enter the student's batch: &quot;);</span>
+<span class="nc" id="L581">            int batch = input.nextInt();</span>
+<span class="nc" id="L582">            input.nextLine(); // Consume the new line character</span>
+
+<span class="nc" id="L584">            System.out.print(&quot;Enter the student's department: &quot;);</span>
+<span class="nc" id="L585">            String department = input.nextLine();</span>
+
+<span class="nc" id="L587">            System.out.print(&quot;Enter the student's current semester: &quot;);</span>
+<span class="nc" id="L588">            int curr_sem = input.nextInt();</span>
+<span class="nc" id="L589">            input.nextLine(); // Consume the new line character</span>
+
+<span class="nc" id="L591">            System.out.print(&quot;Enter the student's CGPA: &quot;);</span>
+<span class="nc" id="L592">            float cgpa = input.nextFloat();</span>
+
+<span class="nc" id="L594">            pstmt.setString(1, email);</span>
+<span class="nc" id="L595">            pstmt.setString(2, entry_number);</span>
+<span class="nc" id="L596">            pstmt.setInt(3, batch);</span>
+<span class="nc" id="L597">            pstmt.setString(4, department);</span>
+<span class="nc" id="L598">            pstmt.setInt(5, curr_sem);</span>
+<span class="nc" id="L599">            pstmt.setFloat(6, cgpa);</span>
+
+<span class="nc" id="L601">            pstmt.executeUpdate();</span>
+
+<span class="nc" id="L603">            App.main(null);</span>
+
+<span class="nc" id="L605">            input.close();</span>
+<span class="nc" id="L606">            pstmt.close();</span>
+<span class="nc" id="L607">            conn.close();</span>
+<span class="nc" id="L608">        } catch (SQLException se) {</span>
+<span class="nc" id="L609">            se.printStackTrace();</span>
+<span class="nc" id="L610">        } catch (Exception e) {</span>
+<span class="nc" id="L611">            e.printStackTrace();</span>
+        } finally {
+            try {
+<span class="nc bnc" id="L614" title="All 2 branches missed.">                if (pstmt != null)</span>
+<span class="nc" id="L615">                    pstmt.close();</span>
+<span class="nc" id="L616">            } catch (SQLException se2) {</span>
+<span class="nc" id="L617">            }</span>
+            try {
+<span class="nc bnc" id="L619" title="All 2 branches missed.">                if (conn != null)</span>
+<span class="nc" id="L620">                    conn.close();</span>
+<span class="nc" id="L621">            } catch (SQLException se) {</span>
+<span class="nc" id="L622">                se.printStackTrace();</span>
+<span class="nc" id="L623">            }</span>
+        }
+<span class="nc" id="L625">    }</span>
+
+    static void show_students() {
+<span class="nc" id="L628">        Connection conn = null;</span>
+<span class="nc" id="L629">        Statement stmt = null;</span>
+        try {
+<span class="nc" id="L631">            conn = ConnectionUtil.getConnection();</span>
+<span class="nc" id="L632">            stmt = conn.createStatement();</span>
+
+<span class="nc" id="L634">            ResultSet rs = stmt.executeQuery(&quot;&quot;);</span>
+
+            try {
+<span class="nc" id="L637">                rs = stmt.executeQuery(&quot;SELECT * FROM students&quot;);</span>
+<span class="nc" id="L638">            } catch (Exception e) {</span>
+
+<span class="nc" id="L640">            }</span>
+
+<span class="nc bnc" id="L642" title="All 2 branches missed.">            while (rs.next()) {</span>
+<span class="nc" id="L643">                String email = rs.getString(&quot;email&quot;);</span>
+<span class="nc" id="L644">                String entry_number = rs.getString(&quot;entry_number&quot;);</span>
+<span class="nc" id="L645">                int batch = rs.getInt(&quot;batch&quot;);</span>
+<span class="nc" id="L646">                String department = rs.getString(&quot;department&quot;);</span>
+<span class="nc" id="L647">                int curr_sem = rs.getInt(&quot;curr_sem&quot;);</span>
+<span class="nc" id="L648">                float cgpa = rs.getFloat(&quot;cgpa&quot;);</span>
+
+<span class="nc" id="L650">                System.out.println(&quot;\nEmail: &quot; + email);</span>
+<span class="nc" id="L651">                System.out.println(&quot;Entry Number: &quot; + entry_number);</span>
+<span class="nc" id="L652">                System.out.println(&quot;Batch: &quot; + batch);</span>
+<span class="nc" id="L653">                System.out.println(&quot;Department: &quot; + department);</span>
+<span class="nc" id="L654">                System.out.println(&quot;Current Semester: &quot; + curr_sem);</span>
+<span class="nc" id="L655">                System.out.println(&quot;CGPA: &quot; + cgpa);</span>
+<span class="nc" id="L656">                System.out.println(&quot;\n&quot;);</span>
+<span class="nc" id="L657">            }</span>
+
+<span class="nc" id="L659">            stmt.close();</span>
+<span class="nc" id="L660">            conn.close();</span>
+<span class="nc" id="L661">        } catch (SQLException se) {</span>
+<span class="nc" id="L662">            se.printStackTrace();</span>
+<span class="nc" id="L663">        } catch (Exception e) {</span>
+<span class="nc" id="L664">            e.printStackTrace();</span>
+        } finally {
+            try {
+<span class="nc bnc" id="L667" title="All 2 branches missed.">                if (stmt != null)</span>
+<span class="nc" id="L668">                    stmt.close();</span>
+<span class="nc" id="L669">            } catch (SQLException se2) {</span>
+<span class="nc" id="L670">            }</span>
+            try {
+<span class="nc bnc" id="L672" title="All 2 branches missed.">                if (conn != null)</span>
+<span class="nc" id="L673">                    conn.close();</span>
+<span class="nc" id="L674">            } catch (SQLException se) {</span>
+<span class="nc" id="L675">                se.printStackTrace();</span>
+<span class="nc" id="L676">            }</span>
+        }
+<span class="nc" id="L678">    }</span>
+
+    static void Insert_Course_Offerings() {
+<span class="nc" id="L681">        Connection conn = null;</span>
+<span class="nc" id="L682">        PreparedStatement pstmt = null;</span>
+        try {
+<span class="nc" id="L684">            conn = ConnectionUtil.getConnection();</span>
+<span class="nc" id="L685">            pstmt = conn.prepareStatement(</span>
+                    &quot;INSERT INTO course_offerings (course_id, instructor_id, cgpa_constraint, min_credits) VALUES (?, ?, ?, ?)&quot;);
+
+<span class="nc" id="L688">            Scanner input = new Scanner(System.in);</span>
+
+<span class="nc" id="L690">            System.out.print(&quot;Enter The course_id: &quot;);</span>
+<span class="nc" id="L691">            int course_id = input.nextInt();</span>
+<span class="nc" id="L692">            input.nextLine(); // Consume the new line character</span>
+
+<span class="nc" id="L694">            System.out.print(&quot;Enter The instructor_id: &quot;);</span>
+<span class="nc" id="L695">            int instructor_id = input.nextInt();</span>
+<span class="nc" id="L696">            input.nextLine(); // Consume the new line character</span>
+
+<span class="nc" id="L698">            System.out.print(&quot;Enter The cgpa_constraint: &quot;);</span>
+<span class="nc" id="L699">            float cgpa_constraint = input.nextFloat();</span>
+<span class="nc" id="L700">            input.nextLine(); // Consume the new line character</span>
+
+<span class="nc" id="L702">            System.out.print(&quot;Enter The min_credits: &quot;);</span>
+<span class="nc" id="L703">            int min_credits = input.nextInt();</span>
+<span class="nc" id="L704">            input.nextLine(); // Consume the new line character</span>
+
+<span class="nc" id="L706">            pstmt.setInt(1, course_id);</span>
+<span class="nc" id="L707">            pstmt.setInt(2, instructor_id);</span>
+<span class="nc" id="L708">            pstmt.setFloat(3, cgpa_constraint);</span>
+<span class="nc" id="L709">            pstmt.setInt(4, min_credits);</span>
+
+<span class="nc" id="L711">            pstmt.executeUpdate();</span>
+
+<span class="nc" id="L713">            App.main(null);</span>
+
+<span class="nc" id="L715">            input.close();</span>
+<span class="nc" id="L716">            pstmt.close();</span>
+<span class="nc" id="L717">            conn.close();</span>
+<span class="nc" id="L718">        } catch (SQLException se) {</span>
+<span class="nc" id="L719">            se.printStackTrace();</span>
+<span class="nc" id="L720">        } catch (Exception e) {</span>
+<span class="nc" id="L721">            e.printStackTrace();</span>
+        } finally {
+            try {
+<span class="nc bnc" id="L724" title="All 2 branches missed.">                if (pstmt != null)</span>
+<span class="nc" id="L725">                    pstmt.close();</span>
+<span class="nc" id="L726">            } catch (SQLException se2) {</span>
+<span class="nc" id="L727">            }</span>
+            try {
+<span class="nc bnc" id="L729" title="All 2 branches missed.">                if (conn != null)</span>
+<span class="nc" id="L730">                    conn.close();</span>
+<span class="nc" id="L731">            } catch (SQLException se) {</span>
+<span class="nc" id="L732">                se.printStackTrace();</span>
+<span class="nc" id="L733">            }</span>
+        }
+<span class="nc" id="L735">    }</span>
+
+    static void Show_Course_Offerings() {
+<span class="nc" id="L738">        Connection conn = null;</span>
+<span class="nc" id="L739">        Statement stmt = null;</span>
+        try {
+<span class="nc" id="L741">            conn = ConnectionUtil.getConnection();</span>
+<span class="nc" id="L742">            stmt = conn.createStatement();</span>
+
+<span class="nc" id="L744">            ResultSet rs = stmt.executeQuery(&quot;&quot;);</span>
+
+            try {
+<span class="nc" id="L747">                rs = stmt.executeQuery(&quot;SELECT * FROM course_offerings&quot;);</span>
+<span class="nc" id="L748">            } catch (Exception e) {</span>
+
+<span class="nc" id="L750">            }</span>
+
+<span class="nc bnc" id="L752" title="All 2 branches missed.">            while (rs.next()) {</span>
+<span class="nc" id="L753">                int course_id = rs.getInt(&quot;course_id&quot;);</span>
+<span class="nc" id="L754">                int instructor_id = rs.getInt(&quot;instructor_id&quot;);</span>
+<span class="nc" id="L755">                float cgpa_constraint = rs.getFloat(&quot;cgpa_constraint&quot;);</span>
+<span class="nc" id="L756">                int min_credits = rs.getInt(&quot;min_credits&quot;);</span>
+
+<span class="nc" id="L758">                System.out.println(&quot;\ncourse_id: &quot; + course_id);</span>
+<span class="nc" id="L759">                System.out.println(&quot;instructor_id: &quot; + instructor_id);</span>
+<span class="nc" id="L760">                System.out.println(&quot;cgpa_constraint: &quot; + cgpa_constraint);</span>
+<span class="nc" id="L761">                System.out.println(&quot;min_credits: &quot; + min_credits);</span>
+<span class="nc" id="L762">                System.out.println(&quot;\n&quot;);</span>
+<span class="nc" id="L763">            }</span>
+
+<span class="nc" id="L765">            stmt.close();</span>
+<span class="nc" id="L766">            conn.close();</span>
+<span class="nc" id="L767">        } catch (SQLException se) {</span>
+<span class="nc" id="L768">            se.printStackTrace();</span>
+<span class="nc" id="L769">        } catch (Exception e) {</span>
+<span class="nc" id="L770">            e.printStackTrace();</span>
+        } finally {
+            try {
+<span class="nc bnc" id="L773" title="All 2 branches missed.">                if (stmt != null)</span>
+<span class="nc" id="L774">                    stmt.close();</span>
+<span class="nc" id="L775">            } catch (SQLException se2) {</span>
+<span class="nc" id="L776">            }</span>
+            try {
+<span class="nc bnc" id="L778" title="All 2 branches missed.">                if (conn != null)</span>
+<span class="nc" id="L779">                    conn.close();</span>
+<span class="nc" id="L780">            } catch (SQLException se) {</span>
+<span class="nc" id="L781">                se.printStackTrace();</span>
+<span class="nc" id="L782">            }</span>
+        }
+<span class="nc" id="L784">    }</span>
+
+    static void Insert_Grades() {
+<span class="nc" id="L787">        Connection conn = null;</span>
+<span class="nc" id="L788">        PreparedStatement pstmt = null;</span>
+        try {
+<span class="nc" id="L790">            conn = ConnectionUtil.getConnection();</span>
+<span class="nc" id="L791">            pstmt = conn.prepareStatement(&quot;INSERT INTO grades (email, course_id, semester, grade) VALUES (?, ?, ?, ?)&quot;);</span>
+
+<span class="nc" id="L793">            Scanner input = new Scanner(System.in);</span>
+
+<span class="nc" id="L795">            System.out.print(&quot;Enter the student's email: &quot;);</span>
+<span class="nc" id="L796">            String email = input.nextLine();</span>
+
+<span class="nc" id="L798">            System.out.print(&quot;Enter the course ID: &quot;);</span>
+<span class="nc" id="L799">            int course_id = input.nextInt();</span>
+<span class="nc" id="L800">            input.nextLine(); // Consume the new line character</span>
+
+<span class="nc" id="L802">            System.out.print(&quot;Enter the semester: &quot;);</span>
+<span class="nc" id="L803">            int semester = input.nextInt();</span>
+<span class="nc" id="L804">            input.nextLine(); // Consume the new line character</span>
+
+<span class="nc" id="L806">            System.out.print(&quot;Enter the grade: &quot;);</span>
+<span class="nc" id="L807">            int grade = input.nextInt();</span>
+<span class="nc" id="L808">            input.nextLine(); // Consume the new line character</span>
+
+<span class="nc" id="L810">            pstmt.setString(1, email);</span>
+<span class="nc" id="L811">            pstmt.setInt(2, course_id);</span>
+<span class="nc" id="L812">            pstmt.setInt(3, semester);</span>
+<span class="nc" id="L813">            pstmt.setInt(4, grade);</span>
+
+<span class="nc" id="L815">            pstmt.executeUpdate();</span>
+
+<span class="nc" id="L817">            App.main(null);</span>
+
+<span class="nc" id="L819">            input.close();</span>
+<span class="nc" id="L820">            pstmt.close();</span>
+<span class="nc" id="L821">            conn.close();</span>
+<span class="nc" id="L822">        } catch (SQLException se) {</span>
+<span class="nc" id="L823">            se.printStackTrace();</span>
+<span class="nc" id="L824">        } catch (Exception e) {</span>
+<span class="nc" id="L825">            e.printStackTrace();</span>
+        } finally {
+            try {
+<span class="nc bnc" id="L828" title="All 2 branches missed.">                if (pstmt != null)</span>
+<span class="nc" id="L829">                    pstmt.close();</span>
+<span class="nc" id="L830">            } catch (SQLException se2) {</span>
+<span class="nc" id="L831">            }</span>
+            try {
+<span class="nc bnc" id="L833" title="All 2 branches missed.">                if (conn != null)</span>
+<span class="nc" id="L834">                    conn.close();</span>
+<span class="nc" id="L835">            } catch (SQLException se) {</span>
+<span class="nc" id="L836">                se.printStackTrace();</span>
+<span class="nc" id="L837">            }</span>
+        }
+<span class="nc" id="L839">    }</span>
+
+    static void Show_Grades(String email) {
+
+        try {
+            // Establishing a database connection
+<span class="nc" id="L845">            Connection conn = DriverManager.getConnection(&quot;jdbc:postgresql://localhost:5432/db&quot;, &quot;postgres&quot;,</span>
+                    &quot;1234&quot;);
+
+            // Preparing the select statement
+<span class="nc" id="L849">            String selectQuery = &quot;SELECT course_id, semester, grade FROM grades WHERE email = ?&quot;;</span>
+<span class="nc" id="L850">            PreparedStatement pstmt = conn.prepareStatement(selectQuery);</span>
+<span class="nc" id="L851">            pstmt.setString(1, email);</span>
+
+            // Executing the select statement
+<span class="nc" id="L854">            ResultSet rs = pstmt.executeQuery();</span>
+
+<span class="nc" id="L856">            int x = 0;</span>
+
+            // Iterating over the result set and printing the grades
+<span class="nc bnc" id="L859" title="All 2 branches missed.">            while (rs.next()) {</span>
+<span class="nc" id="L860">                x = 1;</span>
+<span class="nc" id="L861">                int courseId = rs.getInt(&quot;course_id&quot;);</span>
+<span class="nc" id="L862">                int semester = rs.getInt(&quot;semester&quot;);</span>
+<span class="nc" id="L863">                int grade = rs.getInt(&quot;grade&quot;);</span>
+
+<span class="nc" id="L865">                System.out.println(&quot;Course ID: &quot; + courseId + &quot; | Semester: &quot; + semester + &quot; | Grade: &quot; + grade);</span>
+<span class="nc" id="L866">            }</span>
+
+<span class="nc bnc" id="L868" title="All 2 branches missed.">            if (x == 0)</span>
+<span class="nc" id="L869">                System.out.println(&quot;Student with &quot; + email + &quot; does not exist&quot;);</span>
+
+            // Closing the result set, statement, and database connection
+<span class="nc" id="L872">            rs.close();</span>
+<span class="nc" id="L873">            pstmt.close();</span>
+<span class="nc" id="L874">            conn.close();</span>
+<span class="nc" id="L875">        } catch (SQLException e) {</span>
+<span class="nc" id="L876">            System.out.println(&quot;SQL Exception: &quot; + e.getMessage());</span>
+<span class="nc" id="L877">        }</span>
+<span class="nc" id="L878">    }</span>
+
+    static void delete_course(int course_id) {
+
+        try {
+            // Establishing a database connection
+<span class="nc" id="L884">            Connection conn = DriverManager.getConnection(&quot;jdbc:postgresql://localhost:5432/db&quot;, &quot;postgres&quot;,</span>
+                    &quot;1234&quot;);
+
+            // Preparing the delete statement
+<span class="nc" id="L888">            String deleteQuery = &quot;DELETE FROM course_catalog WHERE course_id = ?&quot;;</span>
+<span class="nc" id="L889">            PreparedStatement pstmt = conn.prepareStatement(deleteQuery);</span>
+<span class="nc" id="L890">            pstmt.setInt(1, course_id);</span>
+
+            // Executing the delete statement
+<span class="nc" id="L893">            int rowsDeleted = pstmt.executeUpdate();</span>
+
+<span class="nc bnc" id="L895" title="All 2 branches missed.">            if (rowsDeleted == 0)</span>
+<span class="nc" id="L896">                System.out.println(&quot;Course with course_id &quot; + course_id + &quot; does not exist&quot;);</span>
+            else
+<span class="nc" id="L898">                System.out.println(&quot;Course with course_id &quot; + course_id + &quot; deleted successfully&quot;);</span>
+
+            // Closing the statement and database connection
+<span class="nc" id="L901">            pstmt.close();</span>
+<span class="nc" id="L902">            conn.close();</span>
+<span class="nc" id="L903">        } catch (SQLException e) {</span>
+<span class="nc" id="L904">            System.out.println(&quot;SQL Exception: &quot; + e.getMessage());</span>
+<span class="nc" id="L905">        }</span>
+<span class="nc" id="L906">    }</span>
+
+    public static void UpdateUserDetails(String address, String phone, String email) {
+<span class="nc" id="L909">        Connection conn = null;</span>
+<span class="nc" id="L910">        PreparedStatement pstmt = null;</span>
+<span class="nc" id="L911">        Scanner input = new Scanner(System.in);</span>
+
+        try {
+<span class="nc" id="L914">            conn = DriverManager.getConnection(&quot;jdbc:postgresql://localhost:5432/db&quot;, &quot;postgres&quot;,</span>
+                    &quot;1234&quot;);
+            // Update the address and phone of the user with email &quot;example@example.com&quot;
+
+<span class="nc" id="L918">            String updateQuery = &quot;UPDATE users SET address = ?, phone = ? WHERE email = ?&quot;;</span>
+<span class="nc" id="L919">            pstmt = conn.prepareStatement(updateQuery);</span>
+
+            // Set the new address and phone values
+<span class="nc" id="L922">            pstmt.setString(1, address);</span>
+<span class="nc" id="L923">            pstmt.setString(2, phone);</span>
+
+            // Set the email of the user to update
+<span class="nc" id="L926">            pstmt.setString(3, email);</span>
+
+            // Execute the update statement
+<span class="nc" id="L929">            int rowsUpdated = pstmt.executeUpdate();</span>
+
+<span class="nc bnc" id="L931" title="All 2 branches missed.">            if (rowsUpdated &gt; 0) {</span>
+<span class="nc" id="L932">                System.out.println(&quot;User details updated successfully&quot;);</span>
+            } else {
+<span class="nc" id="L934">                System.out.println(&quot;No user found with the specified email&quot;);</span>
+            }
+<span class="nc" id="L936">            App.main(null);</span>
+<span class="nc" id="L937">        } catch (SQLException e) {</span>
+<span class="nc" id="L938">            System.out.println(&quot;SQL Exception: &quot; + e.getMessage());</span>
+        } finally {
+            try {
+<span class="nc bnc" id="L941" title="All 2 branches missed.">                if (pstmt != null) {</span>
+<span class="nc" id="L942">                    pstmt.close();</span>
+                }
+<span class="nc bnc" id="L944" title="All 2 branches missed.">                if (conn != null) {</span>
+<span class="nc" id="L945">                    conn.close();</span>
+                }
+<span class="nc" id="L947">            } catch (SQLException e) {</span>
+<span class="nc" id="L948">                System.out.println(&quot;SQL Exception: &quot; + e.getMessage());</span>
+<span class="nc" id="L949">            }</span>
+        }
+<span class="nc" id="L951">        input.close();</span>
+<span class="nc" id="L952">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

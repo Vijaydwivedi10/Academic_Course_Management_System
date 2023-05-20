@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Instructor.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Tests in 'fuckoff.test' Coverage Results, Tests in 'org.example' Coverage Results, StudentTest.testCase1 Coverage Results, InstructorTest.testCase1 Coverage Results, AcademicsTest.testCase1 Coverage Results</a> &gt; <a href="index.source.html" class="el_package">org.example</a> &gt; <span class="el_source">Instructor.java</span></div><h1>Instructor.java</h1><pre class="source lang-java linenums">package org.example;
+
+import java.sql.*;
+import java.util.*;
+
+<span class="nc" id="L6">public class Instructor {</span>
+<span class="nc" id="L7">    static Scanner input = new Scanner(System.in);</span>
+
+<span class="nc" id="L9">    static Connection conn = null;</span>
+<span class="nc" id="L10">    static Statement stmt = null;</span>
+
+    static boolean case1(String email, int course_id, int semester, int newGrade) {
+        try {
+<span class="nc" id="L14">            conn = ConnectionUtil.getConnection();</span>
+<span class="nc" id="L15">            stmt = conn.createStatement();</span>
+
+<span class="nc" id="L17">            String updateQuery = &quot;UPDATE grades SET grade = ? WHERE email = ? AND course_id = ? AND semester = ?&quot;;</span>
+<span class="nc" id="L18">            PreparedStatement pstmt = conn.prepareStatement(updateQuery);</span>
+<span class="nc" id="L19">            pstmt.setInt(1, newGrade);</span>
+<span class="nc" id="L20">            pstmt.setString(2, email);</span>
+<span class="nc" id="L21">            pstmt.setInt(3, course_id);</span>
+<span class="nc" id="L22">            pstmt.setInt(4, semester);</span>
+<span class="nc" id="L23">            int rowsUpdated = pstmt.executeUpdate();</span>
+
+<span class="nc bnc" id="L25" title="All 2 branches missed.">            if (rowsUpdated == 0) {</span>
+<span class="nc" id="L26">                System.out.println(&quot;No record found to update for email: &quot; + email + &quot;, course_id: &quot; + course_id</span>
+                        + &quot;, and semester: &quot; + semester);
+            } else {
+<span class="nc" id="L29">                System.out.println(&quot;Grade updated successfully for email: &quot; + email + &quot;, course_id: &quot; + course_id</span>
+                        + &quot;, and semester: &quot; + semester);
+            }
+
+            // Close the result set and statement
+<span class="nc" id="L34">            pstmt.close();</span>
+<span class="nc" id="L35">            stmt.close();</span>
+<span class="nc" id="L36">        } catch (SQLException e) {</span>
+<span class="nc" id="L37">            System.out.println(&quot;SQL error occurred: &quot; + e.getMessage());</span>
+<span class="nc" id="L38">            return false;</span>
+<span class="nc" id="L39">        }</span>
+
+<span class="nc" id="L41">        return true;</span>
+    }
+
+    static boolean case2() {
+
+<span class="nc" id="L46">        return true;</span>
+    }
+
+    static boolean case3(String instructorEmail) {
+
+        try {
+<span class="nc" id="L52">            conn = ConnectionUtil.getConnection();</span>
+<span class="nc" id="L53">            stmt = conn.createStatement();</span>
+            // Prepare the SQL query to get all courses offered by the instructor
+<span class="nc" id="L55">            String sql = &quot;SELECT c.course_id, c.course_name FROM course_catalog c, course_offerings o, instructors i &quot;</span>
+                    + &quot;WHERE c.course_id = o.course_id AND o.instructor_id = i.instructor_id AND i.email = ?&quot;;
+
+            // Create a PreparedStatement object and set the parameter
+<span class="nc" id="L59">            PreparedStatement pstmt = conn.prepareStatement(sql);</span>
+<span class="nc" id="L60">            pstmt.setString(1, instructorEmail);</span>
+
+            // Execute the query and get the ResultSet object
+<span class="nc" id="L63">            ResultSet rs = pstmt.executeQuery();</span>
+
+            // Loop through the result set and print the courses offered by the instructor
+<span class="nc bnc" id="L66" title="All 2 branches missed.">            while (rs.next()) {</span>
+<span class="nc" id="L67">                int courseId = rs.getInt(&quot;course_id&quot;);</span>
+<span class="nc" id="L68">                String courseName = rs.getString(&quot;course_name&quot;);</span>
+<span class="nc" id="L69">                System.out.println(&quot;Course ID: &quot; + courseId + &quot;, Course Name: &quot; + courseName);</span>
+<span class="nc" id="L70">            }</span>
+
+            // Close the ResultSet and PreparedStatement objects
+<span class="nc" id="L73">            rs.close();</span>
+<span class="nc" id="L74">            pstmt.close();</span>
+<span class="nc" id="L75">        } catch (SQLException e) {</span>
+<span class="nc" id="L76">            e.printStackTrace();</span>
+<span class="nc" id="L77">        }</span>
+
+<span class="nc" id="L79">        return true;</span>
+    }
+
+    static boolean case5(String password) {
+
+        try {
+<span class="nc" id="L85">            conn = ConnectionUtil.getConnection();</span>
+<span class="nc" id="L86">            stmt = conn.createStatement();</span>
+
+<span class="nc" id="L88">            Currentuser c = new Currentuser();</span>
+<span class="nc" id="L89">            String email = c.getEmail();</span>
+
+<span class="nc" id="L91">            String updateQuery = &quot;UPDATE users SET password = ? WHERE email = ?&quot;;</span>
+<span class="nc" id="L92">            PreparedStatement pstmt = conn.prepareStatement(updateQuery);</span>
+<span class="nc" id="L93">            pstmt.setString(1, password);</span>
+<span class="nc" id="L94">            pstmt.setString(2, email);</span>
+
+<span class="nc" id="L96">            pstmt.executeUpdate();</span>
+
+            // Close the result set and statement
+
+<span class="nc" id="L100">            pstmt.close();</span>
+<span class="nc" id="L101">            stmt.close();</span>
+
+<span class="nc" id="L103">        } catch (SQLException e) {</span>
+<span class="nc" id="L104">            System.out.println(&quot;SQL error occurred: &quot; + e.getMessage());</span>
+<span class="nc" id="L105">            return false;</span>
+<span class="nc" id="L106">        }</span>
+
+<span class="nc" id="L108">        return true;</span>
+
+    }
+
+    static boolean case4(String address, String phone, String email) {
+
+        try {
+<span class="nc" id="L115">            conn = DriverManager.getConnection(&quot;jdbc:postgresql://localhost:5432/db&quot;, &quot;postgres&quot;,</span>
+                    &quot;1234&quot;);
+            // Update the address and phone of the user with email &quot;example@example.com&quot;
+
+<span class="nc" id="L119">            String updateQuery = &quot;UPDATE users SET address = ?, phone = ? WHERE email = ?&quot;;</span>
+<span class="nc" id="L120">            PreparedStatement pstmt = conn.prepareStatement(updateQuery);</span>
+
+            // Set the new address and phone values
+<span class="nc" id="L123">            pstmt.setString(1, address);</span>
+<span class="nc" id="L124">            pstmt.setString(2, phone);</span>
+
+            // Set the email of the user to update
+<span class="nc" id="L127">            pstmt.setString(3, email);</span>
+
+            // Execute the update statement
+<span class="nc" id="L130">            int rowsUpdated = pstmt.executeUpdate();</span>
+
+<span class="nc bnc" id="L132" title="All 2 branches missed.">            if (rowsUpdated &gt; 0) {</span>
+<span class="nc" id="L133">                System.out.println(&quot;User details updated successfully&quot;);</span>
+            } else {
+<span class="nc" id="L135">                System.out.println(&quot;No user found with the specified email&quot;);</span>
+            }
+
+<span class="nc" id="L138">        } catch (SQLException e) {</span>
+<span class="nc" id="L139">            System.out.println(&quot;SQL Exception: &quot; + e.getMessage());</span>
+        } finally {
+            try {
+
+<span class="nc bnc" id="L143" title="All 2 branches missed.">                if (conn != null) {</span>
+<span class="nc" id="L144">                    conn.close();</span>
+                }
+<span class="nc" id="L146">            } catch (SQLException e) {</span>
+<span class="nc" id="L147">                System.out.println(&quot;SQL Exception: &quot; + e.getMessage());</span>
+<span class="nc" id="L148">            }</span>
+        }
+
+<span class="nc" id="L151">        return true;</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

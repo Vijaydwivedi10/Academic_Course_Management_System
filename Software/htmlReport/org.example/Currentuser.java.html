@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Currentuser.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Tests in 'fuckoff.test' Coverage Results, Tests in 'org.example' Coverage Results, StudentTest.testCase1 Coverage Results, InstructorTest.testCase1 Coverage Results, AcademicsTest.testCase1 Coverage Results</a> &gt; <a href="index.source.html" class="el_package">org.example</a> &gt; <span class="el_source">Currentuser.java</span></div><h1>Currentuser.java</h1><pre class="source lang-java linenums">package org.example;
+
+import java.security.SecureRandom;
+import java.sql.*;
+import java.util.Base64;
+
+<span class="nc" id="L7">public class Currentuser {</span>
+
+<span class="nc" id="L9">    private static final SecureRandom random = new SecureRandom();</span>
+
+    public static String generateToken(int length) {
+<span class="nc" id="L12">        byte[] bytes = new byte[length];</span>
+<span class="nc" id="L13">        random.nextBytes(bytes);</span>
+<span class="nc" id="L14">        return Base64.getUrlEncoder().withoutPadding().encodeToString(bytes);</span>
+    }
+
+    public static void main(String[] args) {
+<span class="nc" id="L18">        String token = generateToken(16);</span>
+<span class="nc" id="L19">        System.out.println(token);</span>
+<span class="nc" id="L20">    }</span>
+
+    private String email;
+    private String password;
+
+    public String getEmail() throws SQLException {
+<span class="nc" id="L26">        Connection conn = ConnectionUtil.getConnection();</span>
+        try {
+            // Preparing the select statement
+<span class="nc" id="L29">            String selectQuery = &quot;SELECT email FROM users WHERE token IS NOT NULL&quot;;</span>
+<span class="nc" id="L30">            PreparedStatement pstmt = conn.prepareStatement(selectQuery);</span>
+
+            // Executing the select statement
+<span class="nc" id="L33">            ResultSet rs = pstmt.executeQuery();</span>
+
+            // Iterating over the result set and printing the usernames
+<span class="nc bnc" id="L36" title="All 2 branches missed.">            if (rs.next()) {</span>
+<span class="nc" id="L37">                email = rs.getString(&quot;email&quot;);</span>
+
+<span class="nc" id="L39">                System.out.println(email);</span>
+
+            }
+
+            // Closing the result set, statement, and database connection
+<span class="nc" id="L44">            rs.close();</span>
+<span class="nc" id="L45">            pstmt.close();</span>
+<span class="nc" id="L46">        } catch (SQLException e) {</span>
+<span class="nc" id="L47">            System.out.println(&quot;SQL Exception: &quot; + e.getMessage());</span>
+<span class="nc" id="L48">        }</span>
+<span class="nc" id="L49">        return email;</span>
+    }
+
+    public void setEmail(String email) {
+        try {
+            // Establishing a database connection
+<span class="nc" id="L55">            Connection conn = DriverManager.getConnection(&quot;jdbc:postgresql://localhost:5432/db&quot;, &quot;postgres&quot;,</span>
+                    &quot;1234&quot;);
+
+            // Preparing the update statement
+<span class="nc" id="L59">            String updateQuery = &quot;UPDATE users SET token = ? WHERE email = ?&quot;;</span>
+<span class="nc" id="L60">            PreparedStatement pstmt = conn.prepareStatement(updateQuery);</span>
+<span class="nc" id="L61">            pstmt.setString(1, generateToken(16));</span>
+<span class="nc" id="L62">            pstmt.setString(2, email);</span>
+
+            // Executing the update statement
+<span class="nc" id="L65">            int rowsAffected = pstmt.executeUpdate();</span>
+<span class="nc" id="L66">            System.out.println(rowsAffected + &quot; row(s) updated&quot;);</span>
+
+            // Closing the database connection and statement
+<span class="nc" id="L69">            pstmt.close();</span>
+<span class="nc" id="L70">            conn.close();</span>
+<span class="nc" id="L71">        } catch (SQLException e) {</span>
+<span class="nc" id="L72">            System.out.println(&quot;SQL Exception: &quot; + e.getMessage());</span>
+<span class="nc" id="L73">        }</span>
+
+<span class="nc" id="L75">        this.email = email;</span>
+<span class="nc" id="L76">    }</span>
+
+    public void resetTokens() {
+        try {
+            // Establishing a database connection
+<span class="nc" id="L81">            Connection conn = DriverManager.getConnection(&quot;jdbc:postgresql://localhost:5432/db&quot;, &quot;postgres&quot;, &quot;1234&quot;);</span>
+
+            // Preparing the update statement
+<span class="nc" id="L84">            String updateQuery = &quot;UPDATE users SET token = NULL&quot;;</span>
+<span class="nc" id="L85">            PreparedStatement pstmt = conn.prepareStatement(updateQuery);</span>
+
+            // Executing the update statement
+<span class="nc" id="L88">            int rowsAffected = pstmt.executeUpdate();</span>
+<span class="nc" id="L89">            System.out.println(rowsAffected + &quot; row(s) updated&quot;);</span>
+
+            // Closing the database connection and statement
+<span class="nc" id="L92">            pstmt.close();</span>
+<span class="nc" id="L93">            conn.close();</span>
+<span class="nc" id="L94">        } catch (SQLException e) {</span>
+<span class="nc" id="L95">            System.out.println(&quot;SQL Exception: &quot; + e.getMessage());</span>
+<span class="nc" id="L96">        }</span>
+<span class="nc" id="L97">    }</span>
+
+    public String getPassword() {
+<span class="nc" id="L100">        return password;</span>
+    }
+
+    public void setPassword(String password) {
+<span class="nc" id="L104">        this.password = password;</span>
+<span class="nc" id="L105">    }</span>
+
+    public Object getToken() {
+<span class="nc" id="L108">        return null;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

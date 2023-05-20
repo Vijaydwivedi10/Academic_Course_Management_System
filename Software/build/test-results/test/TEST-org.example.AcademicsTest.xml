@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="org.example.AcademicsTest" tests="7" skipped="0" failures="0" errors="0" timestamp="2023-03-07T22:01:49" hostname="VIJAY" time="1.22">
+  <properties/>
+  <testcase name="testCase1()" classname="org.example.AcademicsTest" time="0.404"/>
+  <testcase name="testCase2()" classname="org.example.AcademicsTest" time="0.303"/>
+  <testcase name="testCase3()" classname="org.example.AcademicsTest" time="0.102"/>
+  <testcase name="testCase4()" classname="org.example.AcademicsTest" time="0.216"/>
+  <testcase name="testCase5()" classname="org.example.AcademicsTest" time="0.073"/>
+  <testcase name="testCase6()" classname="org.example.AcademicsTest" time="0.039"/>
+  <testcase name="testGradcheck()" classname="org.example.AcademicsTest" time="0.076"/>
+  <system-out><![CDATA[You chose to insert a course into the course_catalog.
+Data inserted successfully!
+Course with course_id 123 deleted successfully
+
+Course ID: 101
+Course Name: Intro to Programming
+Credit Structure: 3-0-3
+
+
+Course ID: 102
+Course Name: Data Structures
+Credit Structure: 3-1-3
+
+
+Course ID: 103
+Course Name: Algorithms
+Credit Structure: 3-0-3
+
+
+Course ID: 104
+Course Name: Database Systems
+Credit Structure: 3-1-3
+
+
+Course ID: 105
+Course Name: vbn
+Credit Structure: 1-2-3
+
+
+Course ID: 107
+Course Name: newn
+Credit Structure: 6-1-4
+
+1 row(s) updated
+1 row(s) updated
+Course ID: 101 | Semester: 1 | Grade: -1
+Course ID: 102 | Semester: 1 | Grade: -1
+Course ID: 103 | Semester: 1 | Grade: -1
+Course ID: 104 | Semester: 1 | Grade: -1
+Course ID: 105 | Semester: 9 | Grade: -1
+Course ID: 105 | Semester: 10 | Grade: -1
+Course ID: 105 | Semester: 11 | Grade: -1
+Course ID: 105 | Semester: 12 | Grade: -1
+Yes! Student is eligible for graduation
+Yes! Student is eligible for graduation
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

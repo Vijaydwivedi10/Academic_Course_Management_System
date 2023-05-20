@@ -1,0 +1,313 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > Instructor</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">org.example</a>
+</div>
+
+<h1>Coverage Summary for Class: Instructor (org.example)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Instructor</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    75%
+  </span>
+  <span class="absValue">
+    (6/8)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    79.3%
+  </span>
+  <span class="absValue">
+    (88/111)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package org.example;
+&nbsp;
+&nbsp;import java.sql.*;
+&nbsp;import java.util.*;
+&nbsp;
+<b class="nc">&nbsp;public class Instructor {</b>
+<b class="fc">&nbsp;    static Scanner input = new Scanner(System.in);</b>
+&nbsp;
+<b class="fc">&nbsp;    static Connection conn = null;</b>
+<b class="fc">&nbsp;    static Statement stmt = null;</b>
+&nbsp;
+&nbsp;    static boolean upload_grades(String email, int course_id, int semester, int newGrade) {
+&nbsp;        try {
+<b class="fc">&nbsp;            conn = ConnectionUtil.getConnection();</b>
+<b class="fc">&nbsp;            stmt = conn.createStatement();</b>
+&nbsp;
+<b class="fc">&nbsp;            String updateQuery = &quot;UPDATE grades SET grade = ? WHERE email = ? AND course_id = ? AND semester = ?&quot;;</b>
+<b class="fc">&nbsp;            PreparedStatement pstmt = conn.prepareStatement(updateQuery);</b>
+<b class="fc">&nbsp;            pstmt.setInt(1, newGrade);</b>
+<b class="fc">&nbsp;            pstmt.setString(2, email);</b>
+<b class="fc">&nbsp;            pstmt.setInt(3, course_id);</b>
+<b class="fc">&nbsp;            pstmt.setInt(4, semester);</b>
+<b class="fc">&nbsp;            int rowsUpdated = pstmt.executeUpdate();</b>
+&nbsp;
+<b class="fc">&nbsp;            if (rowsUpdated == 0) {</b>
+<b class="fc">&nbsp;                System.out.println(&quot;No record found to update for email: &quot; + email + &quot;, course_id: &quot; + course_id</b>
+&nbsp;                        + &quot;, and semester: &quot; + semester);
+&nbsp;            } else {
+<b class="nc">&nbsp;                System.out.println(&quot;Grade updated successfully for email: &quot; + email + &quot;, course_id: &quot; + course_id</b>
+&nbsp;                        + &quot;, and semester: &quot; + semester);
+&nbsp;            }
+&nbsp;
+&nbsp;            // Close the result set and statement
+<b class="fc">&nbsp;            pstmt.close();</b>
+<b class="fc">&nbsp;            stmt.close();</b>
+<b class="nc">&nbsp;        } catch (SQLException e) {</b>
+<b class="nc">&nbsp;            System.out.println(&quot;SQL error occurred: &quot; + e.getMessage());</b>
+<b class="nc">&nbsp;            return false;</b>
+<b class="fc">&nbsp;        }</b>
+&nbsp;
+<b class="fc">&nbsp;        return true;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    static boolean update_grad() {
+&nbsp;
+<b class="nc">&nbsp;        return true;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    static boolean view_grad(String instructorEmail) {
+&nbsp;
+&nbsp;        try {
+<b class="fc">&nbsp;            conn = ConnectionUtil.getConnection();</b>
+<b class="fc">&nbsp;            stmt = conn.createStatement();</b>
+&nbsp;            // Prepare the SQL query to get all courses offered by the instructor
+<b class="fc">&nbsp;            String sql = &quot;SELECT c.course_id, c.course_name FROM course_catalog c, course_offerings o, instructors i &quot;</b>
+&nbsp;                    + &quot;WHERE c.course_id = o.course_id AND o.instructor_id = i.instructor_id AND i.email = ?&quot;;
+&nbsp;
+&nbsp;            // Create a PreparedStatement object and set the parameter
+<b class="fc">&nbsp;            PreparedStatement pstmt = conn.prepareStatement(sql);</b>
+<b class="fc">&nbsp;            pstmt.setString(1, instructorEmail);</b>
+&nbsp;
+&nbsp;            // Execute the query and get the ResultSet object
+<b class="fc">&nbsp;            ResultSet rs = pstmt.executeQuery();</b>
+&nbsp;
+&nbsp;            // Loop through the result set and print the courses offered by the instructor
+<b class="fc">&nbsp;            while (rs.next()) {</b>
+<b class="fc">&nbsp;                int courseId = rs.getInt(&quot;course_id&quot;);</b>
+<b class="fc">&nbsp;                String courseName = rs.getString(&quot;course_name&quot;);</b>
+<b class="fc">&nbsp;                System.out.println(&quot;Course ID: &quot; + courseId + &quot;, Course Name: &quot; + courseName);</b>
+<b class="fc">&nbsp;            }</b>
+&nbsp;
+&nbsp;            // Close the ResultSet and PreparedStatement objects
+<b class="fc">&nbsp;            rs.close();</b>
+<b class="fc">&nbsp;            pstmt.close();</b>
+<b class="nc">&nbsp;        } catch (SQLException e) {</b>
+<b class="nc">&nbsp;            e.printStackTrace();</b>
+<b class="fc">&nbsp;        }</b>
+&nbsp;
+<b class="fc">&nbsp;        return true;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    static boolean change_pass(String password) {
+&nbsp;
+&nbsp;        try {
+<b class="fc">&nbsp;            conn = ConnectionUtil.getConnection();</b>
+<b class="fc">&nbsp;            stmt = conn.createStatement();</b>
+&nbsp;
+<b class="fc">&nbsp;            Currentuser c = new Currentuser();</b>
+<b class="fc">&nbsp;            String email = c.getEmail();</b>
+&nbsp;
+<b class="fc">&nbsp;            String updateQuery = &quot;UPDATE users SET password = ? WHERE email = ?&quot;;</b>
+<b class="fc">&nbsp;            PreparedStatement pstmt = conn.prepareStatement(updateQuery);</b>
+<b class="fc">&nbsp;            pstmt.setString(1, password);</b>
+<b class="fc">&nbsp;            pstmt.setString(2, email);</b>
+&nbsp;
+<b class="fc">&nbsp;            pstmt.executeUpdate();</b>
+&nbsp;
+&nbsp;            // Close the result set and statement
+&nbsp;
+<b class="fc">&nbsp;            pstmt.close();</b>
+<b class="fc">&nbsp;            stmt.close();</b>
+&nbsp;
+<b class="nc">&nbsp;        } catch (SQLException e) {</b>
+<b class="nc">&nbsp;            System.out.println(&quot;SQL error occurred: &quot; + e.getMessage());</b>
+<b class="nc">&nbsp;            return false;</b>
+<b class="fc">&nbsp;        }</b>
+&nbsp;
+<b class="fc">&nbsp;        return true;</b>
+&nbsp;
+&nbsp;    }
+&nbsp;
+&nbsp;    static boolean update_profile(String address, String phone, String email) {
+&nbsp;
+&nbsp;        try {
+<b class="fc">&nbsp;            conn = DriverManager.getConnection(&quot;jdbc:postgresql://localhost:5432/db&quot;, &quot;postgres&quot;,</b>
+&nbsp;                    &quot;1234&quot;);
+&nbsp;            // Update the address and phone of the user with email &quot;example@example.com&quot;
+&nbsp;
+<b class="fc">&nbsp;            String updateQuery = &quot;UPDATE users SET address = ?, phone = ? WHERE email = ?&quot;;</b>
+<b class="fc">&nbsp;            PreparedStatement pstmt = conn.prepareStatement(updateQuery);</b>
+&nbsp;
+&nbsp;            // Set the new address and phone values
+<b class="fc">&nbsp;            pstmt.setString(1, address);</b>
+<b class="fc">&nbsp;            pstmt.setString(2, phone);</b>
+&nbsp;
+&nbsp;            // Set the email of the user to update
+<b class="fc">&nbsp;            pstmt.setString(3, email);</b>
+&nbsp;
+&nbsp;            // Execute the update statement
+<b class="fc">&nbsp;            int rowsUpdated = pstmt.executeUpdate();</b>
+&nbsp;
+<b class="fc">&nbsp;            if (rowsUpdated &gt; 0) {</b>
+<b class="fc">&nbsp;                System.out.println(&quot;User details updated successfully&quot;);</b>
+&nbsp;            } else {
+<b class="nc">&nbsp;                System.out.println(&quot;No user found with the specified email&quot;);</b>
+&nbsp;            }
+&nbsp;
+<b class="nc">&nbsp;        } catch (SQLException e) {</b>
+<b class="nc">&nbsp;            System.out.println(&quot;SQL Exception: &quot; + e.getMessage());</b>
+&nbsp;        } finally {
+<b class="nc">&nbsp;            try {</b>
+&nbsp;
+<b class="fc">&nbsp;                if (conn != null) {</b>
+<b class="fc">&nbsp;                    conn.close();</b>
+&nbsp;                }
+<b class="nc">&nbsp;            } catch (SQLException e) {</b>
+<b class="nc">&nbsp;                System.out.println(&quot;SQL Exception: &quot; + e.getMessage());</b>
+<b class="fc">&nbsp;            }</b>
+<b class="nc">&nbsp;        }</b>
+&nbsp;
+<b class="fc">&nbsp;        return true;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public static boolean addCourseOffering(int course_id, String instructor_email, float cgpa_constraint) {
+&nbsp;        try {
+<b class="fc">&nbsp;            conn = ConnectionUtil.getConnection();</b>
+<b class="fc">&nbsp;            stmt = conn.createStatement();</b>
+&nbsp;
+&nbsp;            // Check if the instructor exists
+<b class="fc">&nbsp;            String instructorQuery = &quot;SELECT instructor_id FROM instructors WHERE email = ?&quot;;</b>
+<b class="fc">&nbsp;            PreparedStatement pstmt = conn.prepareStatement(instructorQuery);</b>
+<b class="fc">&nbsp;            pstmt.setString(1, instructor_email);</b>
+<b class="fc">&nbsp;            ResultSet rs = pstmt.executeQuery();</b>
+&nbsp;
+<b class="fc">&nbsp;            int instructor_id = 0;</b>
+<b class="fc">&nbsp;            if (rs.next()) {</b>
+<b class="fc">&nbsp;                instructor_id = rs.getInt(&quot;instructor_id&quot;);</b>
+&nbsp;            } else {
+<b class="nc">&nbsp;                System.out.println(&quot;Instructor with email &quot; + instructor_email + &quot; does not exist.&quot;);</b>
+<b class="nc">&nbsp;                return false;</b>
+&nbsp;            }
+&nbsp;
+&nbsp;            // Check if the course already exists in the course_offerings table
+<b class="fc">&nbsp;            String existingCourseQuery = &quot;SELECT course_id FROM course_offerings WHERE course_id = ? AND instructor_id = ?&quot;;</b>
+<b class="fc">&nbsp;            pstmt = conn.prepareStatement(existingCourseQuery);</b>
+<b class="fc">&nbsp;            pstmt.setInt(1, course_id);</b>
+<b class="fc">&nbsp;            pstmt.setInt(2, instructor_id);</b>
+<b class="fc">&nbsp;            rs = pstmt.executeQuery();</b>
+&nbsp;
+<b class="fc">&nbsp;            if (rs.next()) {</b>
+<b class="fc">&nbsp;                System.out.println(&quot;Course with ID &quot; + course_id + &quot; is already offered by instructor with email &quot; + instructor_email + &quot;.&quot;);</b>
+<b class="fc">&nbsp;                return false;</b>
+&nbsp;            }
+&nbsp;
+&nbsp;            // Add the course to course_offerings
+<b class="fc">&nbsp;            String addCourseQuery = &quot;INSERT INTO course_offerings (course_id, instructor_id, cgpa_constraint, min_credits) VALUES (?, ?, ?, ?)&quot;;</b>
+<b class="fc">&nbsp;            pstmt = conn.prepareStatement(addCourseQuery);</b>
+<b class="fc">&nbsp;            pstmt.setInt(1, course_id);</b>
+<b class="fc">&nbsp;            pstmt.setInt(2, instructor_id);</b>
+<b class="fc">&nbsp;            pstmt.setFloat(3, cgpa_constraint);</b>
+<b class="fc">&nbsp;            pstmt.setInt(4, 0); // Dummy value for min_credits</b>
+<b class="fc">&nbsp;            pstmt.executeUpdate();</b>
+&nbsp;
+<b class="fc">&nbsp;            System.out.println(&quot;Course with ID &quot; + course_id + &quot; added to course offerings for instructor with email &quot; + instructor_email + &quot;.&quot;);</b>
+&nbsp;
+&nbsp;            // Close the result set and statement
+<b class="fc">&nbsp;            rs.close();</b>
+<b class="fc">&nbsp;            stmt.close();</b>
+&nbsp;
+<b class="nc">&nbsp;        } catch (SQLException e) {</b>
+<b class="nc">&nbsp;            System.out.println(&quot;SQL error occurred: &quot; + e.getMessage());</b>
+<b class="nc">&nbsp;            return false;</b>
+<b class="fc">&nbsp;        }</b>
+&nbsp;
+<b class="fc">&nbsp;        return true;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-03-07 23:52</div>
+</div>
+</body>
+</html>

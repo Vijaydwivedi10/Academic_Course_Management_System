@@ -1,0 +1,195 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > CurriculumUploader</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">org.example</a>
+</div>
+
+<h1>Coverage Summary for Class: CurriculumUploader (org.example)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">CurriculumUploader</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    74.5%
+  </span>
+  <span class="absValue">
+    (38/51)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package org.example;
+&nbsp;
+&nbsp;import com.opencsv.CSVReader;
+&nbsp;
+&nbsp;import java.io.BufferedReader;
+&nbsp;import java.io.FileNotFoundException;
+&nbsp;import java.io.FileReader;
+&nbsp;import java.io.IOException;
+&nbsp;import java.sql.Connection;
+&nbsp;import java.sql.PreparedStatement;
+&nbsp;import java.sql.ResultSet;
+&nbsp;import java.sql.SQLException;
+&nbsp;import java.util.List;
+&nbsp;
+<b class="fc">&nbsp;public class CurriculumUploader {</b>
+&nbsp;    public static void uploadCurriculum() {
+&nbsp;        String line;
+<b class="fc">&nbsp;        String cvsSplitBy = &quot;,&quot;;</b>
+<b class="fc">&nbsp;        Connection conn = null;</b>
+&nbsp;
+<b class="fc">&nbsp;        BufferedReader br = null;</b>
+&nbsp;        try {
+<b class="fc">&nbsp;            br = new BufferedReader(new FileReader(&quot;C:\\Users\\vijay\\IdeaProjects\\fuckoff\\src\\main\\java\\org\\example\\curriculum.csv&quot;));</b>
+<b class="nc">&nbsp;        } catch (FileNotFoundException e) {</b>
+<b class="nc">&nbsp;            throw new RuntimeException(e);</b>
+<b class="fc">&nbsp;        }</b>
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;        try  {
+<b class="fc">&nbsp;            conn = ConnectionUtil.getConnection();</b>
+<b class="fc">&nbsp;            PreparedStatement pstmt = null;</b>
+<b class="fc">&nbsp;//            br.readLine();</b>
+&nbsp;            // Read the CSV file line by line
+&nbsp;            while (true) {
+&nbsp;                // Split the line by commas
+<b class="fc">&nbsp;               line=br.readLine();</b>
+<b class="fc">&nbsp;               if(line.equals(&quot;&quot;))break;</b>
+<b class="fc">&nbsp;                String[] data = line.split(cvsSplitBy);</b>
+&nbsp;
+<b class="fc">&nbsp;                System.out.println(line);</b>
+&nbsp;
+&nbsp;//                 Get the batch, semester, department, course ID, and course type from the data array
+<b class="fc">&nbsp;                int batch =Integer.parseInt (data[0]);</b>
+<b class="fc">&nbsp;                int semester =Integer.parseInt( data[1]);</b>
+<b class="fc">&nbsp;                System.out.println(data[1]);</b>
+<b class="fc">&nbsp;                String department = data[2];</b>
+<b class="fc">&nbsp;                int course_id = Integer.parseInt(data[3]);</b>
+<b class="fc">&nbsp;                String course_type = data[4];</b>
+&nbsp;//
+&nbsp;//                 Check if the course exists in the course_catalog table
+<b class="fc">&nbsp;                String courseQuery = &quot;SELECT course_name FROM course_catalog WHERE course_id = ?&quot;;</b>
+<b class="fc">&nbsp;                pstmt = conn.prepareStatement(courseQuery);</b>
+<b class="fc">&nbsp;                pstmt.setInt(1, 103);</b>
+<b class="fc">&nbsp;                ResultSet rs = pstmt.executeQuery();</b>
+&nbsp;
+<b class="fc">&nbsp;                if (!rs.next()) {</b>
+<b class="nc">&nbsp;                    System.out.println(&quot;Course with ID &quot; + course_id + &quot; does not exist in the course catalog.&quot;);</b>
+<b class="nc">&nbsp;                    continue;</b>
+&nbsp;                }
+&nbsp;
+<b class="fc">&nbsp;                String course_name = rs.getString(&quot;course_name&quot;);</b>
+&nbsp;
+&nbsp;                // Insert the curriculum into the course_curriculum table
+<b class="fc">&nbsp;                String curriculumQuery = &quot;INSERT INTO course_curriculum (batch, semester, department, course_id, course_type) VALUES (?, ?, ?, ?, ?)&quot;;</b>
+<b class="fc">&nbsp;                pstmt = conn.prepareStatement(curriculumQuery);</b>
+<b class="fc">&nbsp;                pstmt.setInt(1, batch);</b>
+<b class="fc">&nbsp;                pstmt.setInt(2, semester);</b>
+<b class="fc">&nbsp;                pstmt.setString(3, department);</b>
+<b class="fc">&nbsp;                pstmt.setInt(4, course_id);</b>
+<b class="fc">&nbsp;                pstmt.setString(5, course_type);</b>
+<b class="fc">&nbsp;                pstmt.executeUpdate();</b>
+&nbsp;
+<b class="nc">&nbsp;                System.out.println(&quot;Curriculum for course with ID &quot; + course_id + &quot; uploaded for batch &quot; + batch + &quot; and semester &quot; + semester + &quot;.&quot;);</b>
+<b class="nc">&nbsp;            }</b>
+&nbsp;
+<b class="nc">&nbsp;            pstmt.close();</b>
+<b class="nc">&nbsp;        } catch (IOException e) {</b>
+<b class="nc">&nbsp;            e.printStackTrace();</b>
+<b class="fc">&nbsp;        } catch (SQLException e) {</b>
+<b class="fc">&nbsp;            System.out.println(&quot;SQL error occurred: &quot; + e.getMessage());</b>
+&nbsp;        } finally {
+<b class="nc">&nbsp;            try {</b>
+<b class="fc">&nbsp;                if (conn != null) {</b>
+<b class="fc">&nbsp;                    conn.close();</b>
+&nbsp;                }
+<b class="nc">&nbsp;            } catch (SQLException e) {</b>
+<b class="nc">&nbsp;                System.out.println(&quot;SQL error occurred while closing connection: &quot; + e.getMessage());</b>
+<b class="fc">&nbsp;            }</b>
+<b class="nc">&nbsp;        }</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-03-07 23:52</div>
+</div>
+</body>
+</html>

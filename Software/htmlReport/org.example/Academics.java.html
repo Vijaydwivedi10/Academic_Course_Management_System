@@ -1,0 +1,302 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Academics.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Tests in 'fuckoff.test' Coverage Results, Tests in 'org.example' Coverage Results, StudentTest.testCase1 Coverage Results, InstructorTest.testCase1 Coverage Results, AcademicsTest.testCase1 Coverage Results</a> &gt; <a href="index.source.html" class="el_package">org.example</a> &gt; <span class="el_source">Academics.java</span></div><h1>Academics.java</h1><pre class="source lang-java linenums">package org.example;
+
+import java.sql.*;
+import java.util.*;
+
+<span class="nc" id="L6">public class Academics {</span>
+<span class="nc" id="L7">    static Connection conn = null;</span>
+<span class="nc" id="L8">    static Statement stmt = null;</span>
+<span class="nc" id="L9">    static PreparedStatement pstmt = null;</span>
+
+    static boolean case1(int academicsChoice, int course_id, String course_name, String credit_structure) {
+<span class="nc" id="L12">        System.out.println(&quot;You chose to insert a course into the course_catalog.&quot;);</span>
+
+        try {
+<span class="nc" id="L15">            conn = ConnectionUtil.getConnection();</span>
+<span class="nc" id="L16">            pstmt = conn.prepareStatement(</span>
+                    &quot;INSERT INTO course_catalog (course_id, course_name, credit_structure) VALUES (?, ?, ?)&quot;);
+
+<span class="nc" id="L19">            pstmt.setInt(1, course_id);</span>
+<span class="nc" id="L20">            pstmt.setString(2, course_name);</span>
+<span class="nc" id="L21">            pstmt.setString(3, credit_structure);</span>
+
+<span class="nc" id="L23">            pstmt.executeUpdate();</span>
+
+<span class="nc" id="L25">            System.out.println(&quot;Data inserted successfully!&quot;);</span>
+
+<span class="nc" id="L27">            pstmt.close();</span>
+<span class="nc" id="L28">            conn.close();</span>
+<span class="nc" id="L29">        } catch (SQLException se) {</span>
+<span class="nc" id="L30">            se.printStackTrace();</span>
+
+<span class="nc" id="L32">        } catch (Exception e) {</span>
+<span class="nc" id="L33">            e.printStackTrace();</span>
+
+        } finally {
+            try {
+<span class="nc bnc" id="L37" title="All 2 branches missed.">                if (pstmt != null)</span>
+<span class="nc" id="L38">                    pstmt.close();</span>
+<span class="nc" id="L39">            } catch (SQLException se2) {</span>
+
+<span class="nc" id="L41">            }</span>
+            try {
+<span class="nc bnc" id="L43" title="All 2 branches missed.">                if (conn != null)</span>
+<span class="nc" id="L44">                    conn.close();</span>
+<span class="nc" id="L45">            } catch (SQLException se) {</span>
+
+<span class="nc" id="L47">                se.printStackTrace();</span>
+
+<span class="nc" id="L49">            }</span>
+
+        }
+<span class="nc" id="L52">        return true;</span>
+    }
+
+    static boolean case2(int course_id) {
+
+        try {
+            // Establishing a database connection
+<span class="nc" id="L59">            Connection conn = DriverManager.getConnection(&quot;jdbc:postgresql://localhost:5432/db&quot;, &quot;postgres&quot;,</span>
+                    &quot;1234&quot;);
+
+            // Preparing the delete statement
+<span class="nc" id="L63">            String deleteQuery = &quot;DELETE FROM course_catalog WHERE course_id = ?&quot;;</span>
+<span class="nc" id="L64">            PreparedStatement pstmt = conn.prepareStatement(deleteQuery);</span>
+<span class="nc" id="L65">            pstmt.setInt(1, course_id);</span>
+
+            // Executing the delete statement
+<span class="nc" id="L68">            int rowsDeleted = pstmt.executeUpdate();</span>
+
+<span class="nc bnc" id="L70" title="All 2 branches missed.">            if (rowsDeleted == 0)</span>
+<span class="nc" id="L71">                System.out.println(&quot;Course with course_id &quot; + course_id + &quot; does not exist&quot;);</span>
+            else
+<span class="nc" id="L73">                System.out.println(&quot;Course with course_id &quot; + course_id + &quot; deleted successfully&quot;);</span>
+
+            // Closing the statement and database connection
+<span class="nc" id="L76">            pstmt.close();</span>
+<span class="nc" id="L77">            conn.close();</span>
+<span class="nc" id="L78">        } catch (SQLException e) {</span>
+<span class="nc" id="L79">            System.out.println(&quot;SQL Exception: &quot; + e.getMessage());</span>
+<span class="nc" id="L80">        }</span>
+<span class="nc" id="L81">        return true;</span>
+    }
+
+    static boolean case3() {
+
+        try {
+<span class="nc" id="L87">            conn = ConnectionUtil.getConnection();</span>
+<span class="nc" id="L88">            stmt = conn.createStatement();</span>
+
+<span class="nc" id="L90">            ResultSet rs = stmt.executeQuery(&quot;SELECT * FROM course_catalog&quot;);</span>
+
+<span class="nc bnc" id="L92" title="All 2 branches missed.">            while (rs.next()) {</span>
+<span class="nc" id="L93">                int course_id = rs.getInt(&quot;course_id&quot;);</span>
+<span class="nc" id="L94">                String course_name = rs.getString(&quot;course_name&quot;);</span>
+<span class="nc" id="L95">                String credit_structure = rs.getString(&quot;credit_structure&quot;);</span>
+
+<span class="nc" id="L97">                System.out.println(&quot;\nCourse ID: &quot; + course_id);</span>
+<span class="nc" id="L98">                System.out.println(&quot;Course Name: &quot; + course_name);</span>
+<span class="nc" id="L99">                System.out.println(&quot;Credit Structure: &quot; + credit_structure);</span>
+<span class="nc" id="L100">                System.out.println();</span>
+<span class="nc" id="L101">            }</span>
+
+<span class="nc" id="L103">            stmt.close();</span>
+<span class="nc" id="L104">            conn.close();</span>
+<span class="nc" id="L105">        } catch (SQLException se) {</span>
+<span class="nc" id="L106">            se.printStackTrace();</span>
+<span class="nc" id="L107">        } catch (Exception e) {</span>
+<span class="nc" id="L108">            e.printStackTrace();</span>
+        } finally {
+            try {
+<span class="nc bnc" id="L111" title="All 2 branches missed.">                if (stmt != null)</span>
+<span class="nc" id="L112">                    stmt.close();</span>
+<span class="nc" id="L113">            } catch (SQLException se2) {</span>
+<span class="nc" id="L114">            }</span>
+            try {
+<span class="nc bnc" id="L116" title="All 2 branches missed.">                if (conn != null)</span>
+<span class="nc" id="L117">                    conn.close();</span>
+<span class="nc" id="L118">            } catch (SQLException se) {</span>
+<span class="nc" id="L119">                se.printStackTrace();</span>
+<span class="nc" id="L120">            }</span>
+        }
+
+<span class="nc" id="L123">        return true;</span>
+
+    }
+
+    static boolean case4() {
+        try {
+
+<span class="nc" id="L130">            conn = ConnectionUtil.getConnection();</span>
+<span class="nc" id="L131">            stmt = conn.createStatement();</span>
+
+<span class="nc" id="L133">            PreparedStatement pstmt = conn</span>
+<span class="nc" id="L134">                    .prepareStatement(&quot;UPDATE admin SET sem_start = ? WHERE email = ?&quot;);</span>
+            // Set the values for the prepared statement
+<span class="nc" id="L136">            pstmt.setBoolean(1, true);</span>
+<span class="nc" id="L137">            pstmt.setString(2, &quot;admin@example.com&quot;);</span>
+
+<span class="nc" id="L139">            String sql = &quot;UPDATE students SET curr_sem = curr_sem + 1&quot;;</span>
+<span class="nc" id="L140">            stmt.executeUpdate(sql);</span>
+
+            // Execute the update query
+<span class="nc" id="L143">            int rowsAffected = pstmt.executeUpdate();</span>
+<span class="nc" id="L144">            System.out.println(rowsAffected + &quot; row(s) updated&quot;);</span>
+<span class="nc" id="L145">            pstmt.close();</span>
+<span class="nc" id="L146">            conn.close();</span>
+<span class="nc" id="L147">        } catch (SQLException e) {</span>
+<span class="nc" id="L148">            e.printStackTrace();</span>
+<span class="nc" id="L149">        }</span>
+
+        // Csvtodb.fun();
+<span class="nc" id="L152">        return true;</span>
+    }
+
+    static boolean case5() {
+        try {
+
+<span class="nc" id="L158">            conn = ConnectionUtil.getConnection();</span>
+<span class="nc" id="L159">            stmt = conn.createStatement();</span>
+
+<span class="nc" id="L161">            PreparedStatement pstmt = conn</span>
+<span class="nc" id="L162">                    .prepareStatement(&quot;UPDATE admin SET sem_start = ? WHERE email = ?&quot;);</span>
+            // Set the values for the prepared statement
+<span class="nc" id="L164">            pstmt.setBoolean(1, false);</span>
+<span class="nc" id="L165">            pstmt.setString(2, &quot;admin@example.com&quot;);</span>
+
+            // Execute the update query
+<span class="nc" id="L168">            int rowsAffected = pstmt.executeUpdate();</span>
+<span class="nc" id="L169">            System.out.println(rowsAffected + &quot; row(s) updated&quot;);</span>
+<span class="nc" id="L170">            pstmt.close();</span>
+<span class="nc" id="L171">            conn.close();</span>
+<span class="nc" id="L172">        } catch (SQLException e) {</span>
+<span class="nc" id="L173">            e.printStackTrace();</span>
+<span class="nc" id="L174">        }</span>
+<span class="nc" id="L175">        return true;</span>
+    }
+
+    static boolean case6(String email) {
+        try {
+
+            // Establishing a database connection
+<span class="nc" id="L182">            conn = ConnectionUtil.getConnection();</span>
+<span class="nc" id="L183">            stmt = conn.createStatement();</span>
+
+            // Preparing the select statement
+<span class="nc" id="L186">            String selectQuery = &quot;SELECT course_id, semester, grade FROM grades WHERE email = ?&quot;;</span>
+<span class="nc" id="L187">            PreparedStatement pstmt = conn.prepareStatement(selectQuery);</span>
+<span class="nc" id="L188">            pstmt.setString(1, email);</span>
+
+            // Executing the select statement
+<span class="nc" id="L191">            ResultSet rs = pstmt.executeQuery();</span>
+
+<span class="nc" id="L193">            int x = 0;</span>
+
+            // Iterating over the result set and printing the grades
+<span class="nc bnc" id="L196" title="All 2 branches missed.">            while (rs.next()) {</span>
+<span class="nc" id="L197">                x = 1;</span>
+<span class="nc" id="L198">                int courseId = rs.getInt(&quot;course_id&quot;);</span>
+<span class="nc" id="L199">                int semester = rs.getInt(&quot;semester&quot;);</span>
+<span class="nc" id="L200">                int grade = rs.getInt(&quot;grade&quot;);</span>
+
+<span class="nc" id="L202">                System.out.println(&quot;Course ID: &quot; + courseId + &quot; | Semester: &quot; + semester + &quot; | Grade: &quot; + grade);</span>
+<span class="nc" id="L203">            }</span>
+
+<span class="nc bnc" id="L205" title="All 2 branches missed.">            if (x == 0)</span>
+<span class="nc" id="L206">                System.out.println(&quot;Student with &quot; + email + &quot; does not exist&quot;);</span>
+
+            // Closing the result set, statement, and database connection
+<span class="nc" id="L209">            rs.close();</span>
+<span class="nc" id="L210">            pstmt.close();</span>
+<span class="nc" id="L211">            conn.close();</span>
+<span class="nc" id="L212">        } catch (SQLException e) {</span>
+<span class="nc" id="L213">            System.out.println(&quot;SQL Exception: &quot; + e.getMessage());</span>
+<span class="nc" id="L214">        }</span>
+<span class="nc" id="L215">        return true;</span>
+    }
+
+    static boolean gradcheck(String email) {
+        try {
+<span class="nc" id="L220">            Connection conn = ConnectionUtil.getConnection();</span>
+
+            // Get the courses taken by the student
+<span class="nc" id="L223">            PreparedStatement pstmt1 = conn.prepareStatement(&quot;SELECT course_id, grade FROM grades WHERE email = ?&quot;);</span>
+<span class="nc" id="L224">            pstmt1.setString(1, email);</span>
+<span class="nc" id="L225">            ResultSet rs1 = pstmt1.executeQuery();</span>
+
+            // Initialize counts for different types of courses
+<span class="nc" id="L228">            int totalCredits = 0;</span>
+<span class="nc" id="L229">            int programCoreCredits = 0;</span>
+<span class="nc" id="L230">            int engineeringCoreCredits = 0;</span>
+<span class="nc" id="L231">            int electiveCredits = 0;</span>
+<span class="nc" id="L232">            int btpcredit = 0;</span>
+
+            // Iterate over the courses taken by the student
+<span class="nc bnc" id="L235" title="All 2 branches missed.">            while (rs1.next()) {</span>
+<span class="nc" id="L236">                int courseId = rs1.getInt(&quot;course_id&quot;);</span>
+<span class="nc" id="L237">                int grade = rs1.getInt(&quot;grade&quot;);</span>
+
+                // Check if the course is counted towards graduation
+<span class="nc" id="L240">                PreparedStatement pstmt2 = conn.prepareStatement(&quot;SELECT * FROM course_catalog WHERE course_id = ?&quot;);</span>
+<span class="nc" id="L241">                pstmt2.setInt(1, courseId);</span>
+<span class="nc" id="L242">                ResultSet rs2 = pstmt2.executeQuery();</span>
+
+<span class="nc bnc" id="L244" title="All 2 branches missed.">                if (rs2.next()) {</span>
+<span class="nc" id="L245">                    String creditStructure = rs2.getString(&quot;credit_structure&quot;);</span>
+<span class="nc" id="L246">                    String[] credits = creditStructure.split(&quot;-&quot;);</span>
+<span class="nc" id="L247">                    int credit = Integer.parseInt(credits[2]);</span>
+
+                    // Check if the grade is within the required range
+<span class="nc bnc" id="L250" title="All 4 branches missed.">                    if (grade &gt;= 4 &amp;&amp; grade &lt;= 10) {</span>
+<span class="nc" id="L251">                        totalCredits += credit;</span>
+
+                        // Check the course type and increment the corresponding count
+<span class="nc" id="L254">                        PreparedStatement pstmt3 = conn</span>
+<span class="nc" id="L255">                                .prepareStatement(&quot;SELECT course_type FROM course_curriculum WHERE course_id = ?&quot;);</span>
+<span class="nc" id="L256">                        pstmt3.setInt(1, courseId);</span>
+<span class="nc" id="L257">                        ResultSet rs3 = pstmt3.executeQuery();</span>
+
+<span class="nc bnc" id="L259" title="All 2 branches missed.">                        if (rs3.next()) {</span>
+<span class="nc" id="L260">                            String courseType = rs3.getString(&quot;course_type&quot;);</span>
+
+<span class="nc bnc" id="L262" title="All 2 branches missed.">                            if (courseType.equals(&quot;program_core&quot;)) {</span>
+<span class="nc" id="L263">                                programCoreCredits += credit;</span>
+<span class="nc bnc" id="L264" title="All 2 branches missed.">                            } else if (courseType.equals(&quot;engineering_core&quot;)) {</span>
+<span class="nc" id="L265">                                engineeringCoreCredits += credit;</span>
+<span class="nc bnc" id="L266" title="All 2 branches missed.">                            } else if (courseType.equals(&quot;elective&quot;)) {</span>
+<span class="nc" id="L267">                                electiveCredits += credit;</span>
+<span class="nc bnc" id="L268" title="All 2 branches missed.">                            } else if (courseType.equals(&quot;btp&quot;)) {</span>
+<span class="nc" id="L269">                                btpcredit += credit;</span>
+                            }
+                        }
+
+<span class="nc" id="L273">                        rs3.close();</span>
+<span class="nc" id="L274">                        pstmt3.close();</span>
+                    }
+                }
+
+<span class="nc" id="L278">                rs2.close();</span>
+<span class="nc" id="L279">                pstmt2.close();</span>
+<span class="nc" id="L280">            }</span>
+
+<span class="nc" id="L282">            rs1.close();</span>
+<span class="nc" id="L283">            pstmt1.close();</span>
+<span class="nc" id="L284">            conn.close();</span>
+
+            // Check if the student meets the graduation requirements
+<span class="nc bnc" id="L287" title="All 10 branches missed.">            if (totalCredits &gt;= 12 &amp;&amp; programCoreCredits &gt;= 6 &amp;&amp; engineeringCoreCredits &gt;= 3</span>
+                    &amp;&amp; electiveCredits &gt;= 3 &amp;&amp; btpcredit &gt;= 3) {
+<span class="nc" id="L289">                System.out.println(&quot;Yes! Student is eligible for graduation&quot;);</span>
+<span class="nc" id="L290">                return true;</span>
+            } else {
+<span class="nc" id="L292">                System.out.println(&quot;No! Student is not eligible for graduation&quot;);</span>
+<span class="nc" id="L293">                return false;</span>
+            }
+<span class="nc" id="L295">        } catch (SQLException e) {</span>
+<span class="nc" id="L296">            e.printStackTrace();</span>
+<span class="nc" id="L297">            return false;</span>
+        }
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

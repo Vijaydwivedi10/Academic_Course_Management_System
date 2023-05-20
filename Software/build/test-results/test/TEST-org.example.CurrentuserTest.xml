@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="org.example.CurrentuserTest" tests="4" skipped="0" failures="0" errors="0" timestamp="2023-03-07T22:01:51" hostname="VIJAY" time="0.229">
+  <properties/>
+  <testcase name="testGetEmail()" classname="org.example.CurrentuserTest" time="0.087"/>
+  <testcase name="resetTokens()" classname="org.example.CurrentuserTest" time="0.07"/>
+  <testcase name="testGenerateToken()" classname="org.example.CurrentuserTest" time="0.001"/>
+  <testcase name="testSetEmail()" classname="org.example.CurrentuserTest" time="0.069"/>
+  <system-out><![CDATA[john2@example.com
+5 row(s) updated
+1 row(s) inserted
+1 row(s) updated
+New token: 8EFcrNM5tbGAmifQxCYgCA
+1 row(s) deleted
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

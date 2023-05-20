@@ -1,0 +1,768 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>App.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Tests in 'fuckoff.test' Coverage Results, Tests in 'org.example' Coverage Results, StudentTest.testCase1 Coverage Results, InstructorTest.testCase1 Coverage Results, AcademicsTest.testCase1 Coverage Results</a> &gt; <a href="index.source.html" class="el_package">org.example</a> &gt; <span class="el_source">App.java</span></div><h1>App.java</h1><pre class="source lang-java linenums">package org.example;
+
+import java.sql.*;
+import java.util.*;
+
+<span class="nc" id="L6">public class App {</span>
+
+    public static void main(String[] args) {
+<span class="nc" id="L9">        Connection conn = null;</span>
+<span class="nc" id="L10">        Statement stmt = null;</span>
+        try {
+<span class="nc" id="L12">            conn = ConnectionUtil.getConnection();</span>
+<span class="nc" id="L13">            System.out.println(&quot;Creating statement...&quot;);</span>
+<span class="nc" id="L14">            stmt = conn.createStatement();</span>
+
+<span class="nc" id="L16">            Scanner scanner = new Scanner(System.in);</span>
+<span class="nc" id="L17">            int choice = 0;</span>
+
+<span class="nc" id="L19">            String email = &quot;e&quot;;</span>
+<span class="nc" id="L20">            String role = &quot;&quot;;</span>
+
+            try {
+                // Preparing the select statement
+<span class="nc" id="L24">                String selectQuery = &quot;SELECT email,role FROM users WHERE token IS NOT NULL&quot;;</span>
+<span class="nc" id="L25">                PreparedStatement pstmt = conn.prepareStatement(selectQuery);</span>
+
+                // Executing the select statement
+<span class="nc" id="L28">                ResultSet rs = pstmt.executeQuery();</span>
+
+                // Iterating over the result set and printing the usernames
+<span class="nc bnc" id="L31" title="All 2 branches missed.">                if (rs.next()) {</span>
+<span class="nc" id="L32">                    email = rs.getString(&quot;email&quot;);</span>
+<span class="nc" id="L33">                    role = rs.getString(&quot;role&quot;);</span>
+<span class="nc" id="L34">                    System.out.println(email);</span>
+<span class="nc" id="L35">                    System.out.println(role);</span>
+                }
+
+                // Closing the result set, statement, and database connection
+<span class="nc" id="L39">                rs.close();</span>
+<span class="nc" id="L40">                pstmt.close();</span>
+<span class="nc" id="L41">            } catch (SQLException e) {</span>
+<span class="nc" id="L42">                System.out.println(&quot;SQL Exception: &quot; + e.getMessage());</span>
+<span class="nc" id="L43">            }</span>
+
+<span class="nc bnc" id="L45" title="All 2 branches missed.">            if (email.equals(&quot;e&quot;)) {</span>
+<span class="nc" id="L46">                System.out.println(&quot;Welcome to IIT Ropar management system&quot;);</span>
+<span class="nc" id="L47">                System.out.println(&quot;1. Academics&quot;);</span>
+<span class="nc" id="L48">                System.out.println(&quot;2. Students&quot;);</span>
+<span class="nc" id="L49">                System.out.println(&quot;3. Instructors&quot;);</span>
+<span class="nc" id="L50">                System.out.print(&quot;Enter your choice: &quot;);</span>
+
+                try {
+<span class="nc" id="L53">                    choice = scanner.nextInt();</span>
+<span class="nc" id="L54">                } catch (InputMismatchException e) {</span>
+<span class="nc" id="L55">                    System.out.println(&quot;Invalid input type. Please enter an integer.&quot;);</span>
+<span class="nc" id="L56">                    scanner.nextLine(); // clear the scanner buffer</span>
+<span class="nc" id="L57">                }</span>
+
+<span class="nc bnc" id="L59" title="All 4 branches missed.">                switch (choice) {</span>
+                    case 1:
+
+<span class="nc" id="L62">                        Scanner input = new Scanner(System.in);</span>
+
+<span class="nc" id="L64">                        System.out.println(&quot; ---------  LOGIN   --------- &quot;);</span>
+<span class="nc" id="L65">                        System.out.print(&quot;Enter Username : &quot;);</span>
+<span class="nc" id="L66">                        String aemail = input.nextLine();</span>
+<span class="nc" id="L67">                        System.out.print(&quot;Enter Password : &quot;);</span>
+<span class="nc" id="L68">                        String apassword = input.nextLine();</span>
+
+<span class="nc bnc" id="L70" title="All 2 branches missed.">                        if (Queries.Login_val(aemail, apassword, &quot;academic&quot;)) {</span>
+<span class="nc" id="L71">                            Currentuser currentUser = new Currentuser(); // create an instance of Currentuser</span>
+<span class="nc" id="L72">                            currentUser.setEmail(aemail); // call setEmail on the instance</span>
+<span class="nc" id="L73">                            int academicsChoice = 0;</span>
+
+<span class="nc" id="L75">                            System.out.println(&quot;Academics Menu&quot;);</span>
+<span class="nc" id="L76">                            System.out.println(&quot;1. Insert a course into the course_catalog.&quot;);</span>
+<span class="nc" id="L77">                            System.out.println(&quot;2. Delete a course from course_catalog.&quot;);</span>
+<span class="nc" id="L78">                            System.out.println(&quot;3. Show All courses&quot;);</span>
+<span class="nc" id="L79">                            System.out.println(&quot;4. Start semester&quot;);</span>
+<span class="nc" id="L80">                            System.out.println(&quot;5. End Semester&quot;);</span>
+<span class="nc" id="L81">                            System.out.println(&quot;6. View grades of Students.&quot;);</span>
+<span class="nc" id="L82">                            System.out.println(&quot;7. Graduation check for student&quot;);</span>
+<span class="nc" id="L83">                            System.out.println(&quot;8. Generate student Transcript&quot;);</span>
+<span class="nc" id="L84">                            System.out.println(&quot;9. Logout.&quot;);</span>
+
+                            try {
+<span class="nc" id="L87">                                System.out.print(&quot;Enter your choice: &quot;);</span>
+<span class="nc" id="L88">                                academicsChoice = scanner.nextInt();</span>
+<span class="nc" id="L89">                            } catch (InputMismatchException e) {</span>
+<span class="nc" id="L90">                                System.out.println(&quot;Invalid input type. Please enter an integer.&quot;);</span>
+<span class="nc" id="L91">                                scanner.nextLine(); // clear the scanner buffer</span>
+<span class="nc" id="L92">                            }</span>
+
+<span class="nc bnc" id="L94" title="All 10 branches missed.">                            switch (academicsChoice) {</span>
+                                case 1:
+
+<span class="nc" id="L97">                                    System.out.print(&quot;Enter the course ID: &quot;);</span>
+<span class="nc" id="L98">                                    int course_id = input.nextInt();</span>
+<span class="nc" id="L99">                                    input.nextLine(); // Consume the new line character</span>
+
+<span class="nc" id="L101">                                    System.out.print(&quot;Enter the course name: &quot;);</span>
+<span class="nc" id="L102">                                    String course_name = input.nextLine();</span>
+
+<span class="nc" id="L104">                                    System.out.print(&quot;Enter the credit structure: &quot;);</span>
+<span class="nc" id="L105">                                    String credit_structure = input.nextLine();</span>
+
+<span class="nc" id="L107">                                    Academics.case1(academicsChoice, course_id, course_name,</span>
+                                            credit_structure);
+
+<span class="nc" id="L110">                                    App.main(args);</span>
+
+<span class="nc" id="L112">                                    break;</span>
+                                case 2:
+<span class="nc" id="L114">                                    System.out.println(&quot;You chose to delete a course from the course_catalog.&quot;);</span>
+<span class="nc" id="L115">                                    System.out.print(&quot;Enter Course ID: &quot;);</span>
+<span class="nc" id="L116">                                    int course_id2 = scanner.nextInt(); // use scanner.next() instead of</span>
+                                                                        // scanner.nextLine()
+<span class="nc" id="L118">                                    Academics.case2(course_id2);</span>
+
+<span class="nc" id="L120">                                    App.main(args);</span>
+
+                                    // perform delete course from course_catalog
+<span class="nc" id="L123">                                    break;</span>
+                                case 3:
+<span class="nc" id="L125">                                    System.out.println(&quot;You chose to show all courses.&quot;);</span>
+                                    // Queries.show_Courses();
+<span class="nc" id="L127">                                    Academics.case3();</span>
+
+<span class="nc" id="L129">                                    App.main(args);</span>
+                                    // perform show all courses
+<span class="nc" id="L131">                                    break;</span>
+                                case 4:
+<span class="nc" id="L133">                                    System.out.println(&quot;You chose to start the semester.&quot;);</span>
+<span class="nc" id="L134">                                    Academics.case4();</span>
+<span class="nc" id="L135">                                    App.main(args);</span>
+                                    // perform start semester
+<span class="nc" id="L137">                                    break;</span>
+                                case 5:
+<span class="nc" id="L139">                                    System.out.println(&quot;You chose to end the semester.&quot;);</span>
+
+<span class="nc" id="L141">                                    Academics.case5();</span>
+<span class="nc" id="L142">                                    App.main(args);</span>
+                                    // perform end semester
+<span class="nc" id="L144">                                    break;</span>
+                                case 6:
+<span class="nc" id="L146">                                    System.out.println(&quot;You chose to view the grades of students.&quot;);</span>
+<span class="nc" id="L147">                                    System.out.print(&quot;Enter the email of the student: &quot;);</span>
+<span class="nc" id="L148">                                    String email2 = scanner.next(); // use scanner.next() instead of scanner.nextLine()</span>
+                                    // Queries.Show_Grades(email2);
+<span class="nc" id="L150">                                    Academics.case6(email2);</span>
+
+<span class="nc" id="L152">                                    App.main(args);</span>
+                                    // perform view grades of students
+<span class="nc" id="L154">                                    break;</span>
+                                case 7:
+<span class="nc" id="L156">                                    System.out.print(&quot;Enter the Email: &quot;);</span>
+<span class="nc" id="L157">                                    email = scanner.next();</span>
+<span class="nc" id="L158">                                    Academics.gradcheck(email);</span>
+<span class="nc" id="L159">                                    break;</span>
+                                case 8:
+<span class="nc" id="L161">                                    System.out.print(&quot;Enter the Email: &quot;);</span>
+<span class="nc" id="L162">                                    email = scanner.next();</span>
+<span class="nc" id="L163">                                    Student.TranscriptGenerator(email);</span>
+<span class="nc" id="L164">                                    break;</span>
+                                case 9:
+<span class="nc" id="L166">                                    System.out.println(&quot;You chose to logout.&quot;);</span>
+<span class="nc" id="L167">                                    Currentuser currentuser = new Currentuser();</span>
+<span class="nc" id="L168">                                    currentuser.resetTokens();</span>
+<span class="nc" id="L169">                                    App.main(null);</span>
+<span class="nc" id="L170">                                    break;</span>
+                                default:
+<span class="nc" id="L172">                                    System.out.println(&quot;Invalid choice!&quot;);</span>
+<span class="nc" id="L173">                                    App.main(args);</span>
+                            }
+
+<span class="nc" id="L176">                            App.main(args);</span>
+<span class="nc" id="L177">                        } else {</span>
+<span class="nc" id="L178">                            System.out.println(&quot;Wrong Username and Password\nTry Again...&quot;);</span>
+<span class="nc" id="L179">                            App.main(null);</span>
+                        }
+<span class="nc" id="L181">                        input.close();</span>
+                        // Academics.fun(loggedIn);
+<span class="nc" id="L183">                        break;</span>
+                    case 2:
+<span class="nc" id="L185">                        String sql = &quot;SELECT sem_start FROM admin WHERE email = ?&quot;;</span>
+<span class="nc" id="L186">                        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {</span>
+<span class="nc" id="L187">                            pstmt.setString(1, &quot;admin@example.com&quot;);</span>
+
+<span class="nc" id="L189">                            ResultSet rs = pstmt.executeQuery();</span>
+<span class="nc bnc" id="L190" title="All 2 branches missed.">                            if (rs.next()) {</span>
+<span class="nc" id="L191">                                boolean semStart = rs.getBoolean(&quot;sem_start&quot;);</span>
+<span class="nc" id="L192">                                System.out.println(&quot;Semester Start for Admin: &quot; + semStart);</span>
+<span class="nc bnc" id="L193" title="All 2 branches missed.">                                if (semStart) {</span>
+
+<span class="nc" id="L195">                                    System.out.println(&quot; ---------  LOGIN   --------- &quot;);</span>
+<span class="nc" id="L196">                                    System.out.print(&quot;Enter Username : &quot;);</span>
+<span class="nc" id="L197">                                    String semail = scanner.next();</span>
+<span class="nc" id="L198">                                    System.out.print(&quot;Enter Password : &quot;);</span>
+<span class="nc" id="L199">                                    String spassword = scanner.next();</span>
+
+<span class="nc bnc" id="L201" title="All 2 branches missed.">                                    if (Queries.Login_val(semail, spassword, &quot;student&quot;)) {</span>
+<span class="nc" id="L202">                                        Currentuser currentUser = new Currentuser(); // create an instance of</span>
+                                                                                     // Currentuser
+<span class="nc" id="L204">                                        currentUser.setEmail(semail); // call setEmail on the instance</span>
+<span class="nc" id="L205">                                        int studentsChoice = 0;</span>
+
+<span class="nc" id="L207">                                        System.out.println(&quot;Students Menu&quot;);</span>
+<span class="nc" id="L208">                                        System.out.println(&quot;1. Register for a course&quot;);</span>
+<span class="nc" id="L209">                                        System.out.println(&quot;2. Deregister for a course.&quot;);</span>
+<span class="nc" id="L210">                                        System.out.println(&quot;3. View my grades.&quot;);</span>
+<span class="nc" id="L211">                                        System.out.println(&quot;4. Update Profile&quot;);</span>
+<span class="nc" id="L212">                                        System.out.println(&quot;5. Change Password&quot;);</span>
+<span class="nc" id="L213">                                        System.out.println(&quot;6. Logout.&quot;);</span>
+                                        try {
+<span class="nc" id="L215">                                            System.out.print(&quot;Enter your choice: &quot;);</span>
+<span class="nc" id="L216">                                            studentsChoice = scanner.nextInt();</span>
+<span class="nc" id="L217">                                        } catch (InputMismatchException e) {</span>
+<span class="nc" id="L218">                                            System.out.println(&quot;Invalid input type. Please enter an integer.&quot;);</span>
+<span class="nc" id="L219">                                            scanner.nextLine(); // clear the scanner buffer</span>
+<span class="nc" id="L220">                                        }</span>
+
+<span class="nc bnc" id="L222" title="All 7 branches missed.">                                        switch (studentsChoice) {</span>
+                                            case 1:
+<span class="nc" id="L224">                                                System.out.println(&quot;Performing course registration...&quot;);</span>
+<span class="nc" id="L225">                                                System.out.println(&quot;Enter Course ID: &quot;);</span>
+<span class="nc" id="L226">                                                int course_id = scanner.nextInt();</span>
+<span class="nc" id="L227">                                                Currentuser c = new Currentuser();</span>
+<span class="nc" id="L228">                                                email = c.getEmail();</span>
+<span class="nc" id="L229">                                                Student.case1(course_id, email);</span>
+<span class="nc" id="L230">                                                App.main(null);</span>
+                                                // perform register for a course
+<span class="nc" id="L232">                                                break;</span>
+                                            case 2:
+<span class="nc" id="L234">                                                System.out.println(&quot;Performing course deregistration...&quot;);</span>
+<span class="nc" id="L235">                                                course_id = scanner.nextInt();</span>
+<span class="nc" id="L236">                                                Student.case2(course_id);</span>
+<span class="nc" id="L237">                                                App.main(null);</span>
+                                                // perform deregister for a course
+<span class="nc" id="L239">                                                break;</span>
+                                            case 3:
+<span class="nc" id="L241">                                                System.out.println(&quot;Performing view grades...&quot;);</span>
+<span class="nc" id="L242">                                                c = new Currentuser();</span>
+<span class="nc" id="L243">                                                String email2 = c.getEmail();</span>
+                                                // Queries.Show_Grades(email2);
+<span class="nc" id="L245">                                                Student.case3(email2);</span>
+<span class="nc" id="L246">                                                App.main(null);</span>
+                                                // perform view my grades
+<span class="nc" id="L248">                                                break;</span>
+                                            case 4:
+<span class="nc" id="L250">                                                System.out.println(&quot;Performing profile update...&quot;);</span>
+<span class="nc" id="L251">                                                c = new Currentuser();</span>
+<span class="nc" id="L252">                                                email = c.getEmail();</span>
+<span class="nc" id="L253">                                                System.out.print(&quot;Enter the address: &quot;);</span>
+<span class="nc" id="L254">                                                String address = scanner.next();</span>
+<span class="nc" id="L255">                                                scanner.nextLine();</span>
+<span class="nc" id="L256">                                                System.out.print(&quot;Enter the phone: &quot;);</span>
+<span class="nc" id="L257">                                                String phone = scanner.nextLine();</span>
+<span class="nc" id="L258">                                                Student.case4(address, phone, email);</span>
+                                                // Queries.UpdateUserDetails(address, phone, email);
+<span class="nc" id="L260">                                                App.main(null);</span>
+<span class="nc" id="L261">                                                break;</span>
+                                            case 5:
+<span class="nc" id="L263">                                                System.out.println(&quot;Performing password change...&quot;);</span>
+<span class="nc" id="L264">                                                System.out.print(&quot;Enter new Password: &quot;);</span>
+<span class="nc" id="L265">                                                String password = scanner.next();</span>
+<span class="nc" id="L266">                                                Student.case5(password);</span>
+<span class="nc" id="L267">                                                App.main(null);</span>
+                                                // perform change password
+<span class="nc" id="L269">                                                break;</span>
+                                            case 6:
+<span class="nc" id="L271">                                                System.out.println(&quot;Performing logout...&quot;);</span>
+<span class="nc" id="L272">                                                Student.case6();</span>
+
+<span class="nc" id="L274">                                                System.out.println(&quot;Logged out successfully!&quot;);</span>
+<span class="nc" id="L275">                                                Currentuser currentuser = new Currentuser();</span>
+<span class="nc" id="L276">                                                currentuser.resetTokens();</span>
+<span class="nc" id="L277">                                                App.main(args);</span>
+
+                                            default:
+<span class="nc" id="L280">                                                System.out.println(&quot;Invalid choice!&quot;);</span>
+<span class="nc" id="L281">                                                App.main(null);</span>
+                                        }
+
+<span class="nc" id="L284">                                        App.main(args);</span>
+<span class="nc" id="L285">                                    } else {</span>
+<span class="nc" id="L286">                                        System.out.println(&quot;Wrong Username and Password\nTry Again...&quot;);</span>
+<span class="nc" id="L287">                                        App.main(null);</span>
+                                    }
+
+<span class="nc" id="L290">                                } else {</span>
+<span class="nc" id="L291">                                    System.out.println(&quot;Semester not Started by Admin: &quot; + semStart);</span>
+<span class="nc" id="L292">                                    App.main(args);</span>
+                                }
+<span class="nc" id="L294">                            } else {</span>
+<span class="nc" id="L295">                                System.out.println(&quot;No data found for admin@example.com&quot;);</span>
+                            }
+                            // Student.fun(loggedIn);
+<span class="nc" id="L298">                        } catch (SQLException e) {</span>
+<span class="nc" id="L299">                            e.printStackTrace();</span>
+<span class="nc" id="L300">                        }</span>
+
+<span class="nc" id="L302">                        App.main(args);</span>
+<span class="nc" id="L303">                        break;</span>
+                    case 3:
+<span class="nc" id="L305">                        sql = &quot;SELECT sem_start FROM admin WHERE email = ?&quot;;</span>
+<span class="nc" id="L306">                        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {</span>
+<span class="nc" id="L307">                            pstmt.setString(1, &quot;admin@example.com&quot;);</span>
+
+<span class="nc" id="L309">                            ResultSet rs = pstmt.executeQuery();</span>
+<span class="nc bnc" id="L310" title="All 2 branches missed.">                            if (rs.next()) {</span>
+<span class="nc" id="L311">                                boolean semStart = rs.getBoolean(&quot;sem_start&quot;);</span>
+<span class="nc" id="L312">                                System.out.println(&quot;Semester Start for Admin: &quot; + semStart);</span>
+<span class="nc bnc" id="L313" title="All 2 branches missed.">                                if (semStart) {</span>
+
+<span class="nc" id="L315">                                    System.out.println(&quot; ---------  LOGIN   --------- &quot;);</span>
+<span class="nc" id="L316">                                    System.out.print(&quot;Enter Username : &quot;);</span>
+<span class="nc" id="L317">                                    String iemail = scanner.next();</span>
+<span class="nc" id="L318">                                    System.out.print(&quot;Enter Password : &quot;);</span>
+<span class="nc" id="L319">                                    String ipassword = scanner.next();</span>
+
+<span class="nc bnc" id="L321" title="All 2 branches missed.">                                    if (Queries.Login_val(iemail, ipassword, &quot;instructor&quot;)) {</span>
+<span class="nc" id="L322">                                        Currentuser currentUser = new Currentuser(); // create an instance of</span>
+                                                                                     // Currentuser
+<span class="nc" id="L324">                                        currentUser.setEmail(iemail); // call setEmail on the instance</span>
+
+<span class="nc" id="L326">                                        int instructorsChoice = 0;</span>
+
+<span class="nc" id="L328">                                        System.out.println(&quot;Instructors Menu&quot;);</span>
+<span class="nc" id="L329">                                        System.out.println(&quot;1. Add a grade for a student&quot;);</span>
+<span class="nc" id="L330">                                        System.out.println(&quot;2. Update grade of a student.&quot;);</span>
+<span class="nc" id="L331">                                        System.out.println(&quot;3. View my courses.&quot;);</span>
+<span class="nc" id="L332">                                        System.out.println(&quot;4. Update Profile&quot;);</span>
+<span class="nc" id="L333">                                        System.out.println(&quot;5. Change Password&quot;);</span>
+<span class="nc" id="L334">                                        System.out.println(&quot;6. Logout.&quot;);</span>
+
+                                        try {
+<span class="nc" id="L337">                                            System.out.print(&quot;Enter your choice: &quot;);</span>
+<span class="nc" id="L338">                                            instructorsChoice = scanner.nextInt();</span>
+<span class="nc" id="L339">                                        } catch (InputMismatchException e) {</span>
+<span class="nc" id="L340">                                            System.out.println(&quot;Invalid input type. Please enter an integer.&quot;);</span>
+<span class="nc" id="L341">                                            scanner.nextLine(); // clear the scanner buffer</span>
+<span class="nc" id="L342">                                        }</span>
+
+<span class="nc bnc" id="L344" title="All 7 branches missed.">                                        switch (instructorsChoice) {</span>
+                                            case 1:
+<span class="nc" id="L346">                                                System.out.println(&quot;Add a grade for a student&quot;);</span>
+<span class="nc" id="L347">                                                System.out.print(&quot;Enter Student's Email: &quot;);</span>
+<span class="nc" id="L348">                                                email = scanner.next();</span>
+<span class="nc" id="L349">                                                System.out.print(&quot;Enter Student's course id: &quot;);</span>
+<span class="nc" id="L350">                                                int course_id = scanner.nextInt();</span>
+<span class="nc" id="L351">                                                System.out.print(&quot;Enter Student's grade: &quot;);</span>
+<span class="nc" id="L352">                                                int grade = scanner.nextInt();</span>
+
+<span class="nc" id="L354">                                                String selectQuery = &quot;SELECT curr_sem FROM students&quot;;</span>
+<span class="nc" id="L355">                                                rs = stmt.executeQuery(selectQuery);</span>
+<span class="nc" id="L356">                                                int curr_sem = 0;</span>
+                                                // Process the results
+<span class="nc bnc" id="L358" title="All 2 branches missed.">                                                if (rs.next()) {</span>
+<span class="nc" id="L359">                                                    curr_sem = rs.getInt(&quot;curr_sem&quot;);</span>
+<span class="nc" id="L360">                                                    System.out.println(&quot;Current Semester: &quot; + curr_sem);</span>
+                                                }
+
+<span class="nc" id="L363">                                                Instructor.case1(email, course_id, curr_sem, grade);</span>
+
+<span class="nc" id="L365">                                                App.main(null);</span>
+<span class="nc" id="L366">                                                break;</span>
+                                            case 2:
+<span class="nc" id="L368">                                                System.out.println(&quot;Update grade of a student&quot;);</span>
+<span class="nc" id="L369">                                                System.out.print(&quot;Enter Student's Email: &quot;);</span>
+<span class="nc" id="L370">                                                email = scanner.next();</span>
+<span class="nc" id="L371">                                                System.out.print(&quot;Enter Student's course id: &quot;);</span>
+<span class="nc" id="L372">                                                course_id = scanner.nextInt();</span>
+<span class="nc" id="L373">                                                System.out.print(&quot;Enter Student's grade: &quot;);</span>
+<span class="nc" id="L374">                                                grade = scanner.nextInt();</span>
+
+<span class="nc" id="L376">                                                selectQuery = &quot;SELECT curr_sem FROM students&quot;;</span>
+<span class="nc" id="L377">                                                rs = stmt.executeQuery(selectQuery);</span>
+<span class="nc" id="L378">                                                curr_sem = 0;</span>
+                                                // Process the results
+<span class="nc bnc" id="L380" title="All 2 branches missed.">                                                if (rs.next()) {</span>
+<span class="nc" id="L381">                                                    curr_sem = rs.getInt(&quot;curr_sem&quot;);</span>
+<span class="nc" id="L382">                                                    System.out.println(&quot;Current Semester: &quot; + curr_sem);</span>
+                                                }
+<span class="nc" id="L384">                                                rs.close();</span>
+
+<span class="nc" id="L386">                                                Instructor.case1(email, course_id, curr_sem, grade);</span>
+<span class="nc" id="L387">                                                App.main(null);</span>
+<span class="nc" id="L388">                                                break;</span>
+                                            case 3:
+<span class="nc" id="L390">                                                System.out.println(&quot;View my courses&quot;);</span>
+<span class="nc" id="L391">                                                Currentuser c = new Currentuser();</span>
+<span class="nc" id="L392">                                                email = c.getEmail();</span>
+<span class="nc" id="L393">                                                Instructor.case3(email);</span>
+<span class="nc" id="L394">                                                App.main(null);</span>
+<span class="nc" id="L395">                                                break;</span>
+                                            case 4:
+<span class="nc" id="L397">                                                System.out.println(&quot;Update profile&quot;);</span>
+<span class="nc" id="L398">                                                c = new Currentuser();</span>
+<span class="nc" id="L399">                                                email = c.getEmail();</span>
+<span class="nc" id="L400">                                                System.out.print(&quot;Enter the address: &quot;);</span>
+<span class="nc" id="L401">                                                String address = scanner.next();</span>
+<span class="nc" id="L402">                                                scanner.nextLine();</span>
+<span class="nc" id="L403">                                                System.out.print(&quot;Enter the phone: &quot;);</span>
+<span class="nc" id="L404">                                                String phone = scanner.nextLine();</span>
+<span class="nc" id="L405">                                                Student.case4(address, phone, email);</span>
+<span class="nc" id="L406">                                                App.main(null);</span>
+<span class="nc" id="L407">                                                break;</span>
+                                            case 5:
+<span class="nc" id="L409">                                                System.out.println(&quot;Change password&quot;);</span>
+<span class="nc" id="L410">                                                System.out.print(&quot;Enter new Password: &quot;);</span>
+<span class="nc" id="L411">                                                String password = scanner.next();</span>
+<span class="nc" id="L412">                                                Instructor.case5(password);</span>
+<span class="nc" id="L413">                                                App.main(null);</span>
+<span class="nc" id="L414">                                                break;</span>
+                                            case 6:
+<span class="nc" id="L416">                                                Currentuser currentuser = new Currentuser();</span>
+<span class="nc" id="L417">                                                currentuser.resetTokens();</span>
+<span class="nc" id="L418">                                                App.main(null);</span>
+<span class="nc" id="L419">                                                break;</span>
+                                            default:
+<span class="nc" id="L421">                                                System.out.println(&quot;Invalid choice!&quot;);</span>
+<span class="nc" id="L422">                                                App.main(null);</span>
+                                        }
+
+<span class="nc" id="L425">                                    } else {</span>
+<span class="nc" id="L426">                                        System.out.println(&quot;Wrong Username and Password\nTry Again...&quot;);</span>
+<span class="nc" id="L427">                                        App.main(null);</span>
+                                    }
+
+<span class="nc" id="L430">                                } else {</span>
+<span class="nc" id="L431">                                    System.out.println(&quot;Semester not Started by Admin: &quot; + semStart);</span>
+<span class="nc" id="L432">                                    App.main(args);</span>
+                                }
+<span class="nc" id="L434">                            } else {</span>
+<span class="nc" id="L435">                                System.out.println(&quot;No data found for admin@example.com&quot;);</span>
+                            }
+<span class="nc" id="L437">                        } catch (SQLException e) {</span>
+<span class="nc" id="L438">                            e.printStackTrace();</span>
+<span class="nc" id="L439">                        }</span>
+<span class="nc" id="L440">                        App.main(args);</span>
+                        // Faculty.fun(loggedIn);
+<span class="nc" id="L442">                        break;</span>
+                    default:
+<span class="nc" id="L444">                        System.out.println(&quot;Invalid choice!&quot;);</span>
+                }
+
+            }
+
+            else {
+<span class="nc bnc" id="L450" title="All 2 branches missed.">                if (role.equals(&quot;academic&quot;)) {</span>
+<span class="nc" id="L451">                    int academicsChoice = 0;</span>
+
+<span class="nc" id="L453">                    System.out.println(&quot;Academics Menu&quot;);</span>
+<span class="nc" id="L454">                    System.out.println(&quot;1. Insert a course into the course_catalog.&quot;);</span>
+<span class="nc" id="L455">                    System.out.println(&quot;2. Delete a course from course_catalog.&quot;);</span>
+<span class="nc" id="L456">                    System.out.println(&quot;3. Show All courses&quot;);</span>
+<span class="nc" id="L457">                    System.out.println(&quot;4. Start semester&quot;);</span>
+<span class="nc" id="L458">                    System.out.println(&quot;5. End Semester&quot;);</span>
+<span class="nc" id="L459">                    System.out.println(&quot;6. View grades of Students.&quot;);</span>
+<span class="nc" id="L460">                    System.out.println(&quot;7. Graduation check for student&quot;);</span>
+<span class="nc" id="L461">                    System.out.println(&quot;8. Generate student Transcript&quot;);</span>
+<span class="nc" id="L462">                    System.out.println(&quot;9. Logout.&quot;);</span>
+
+<span class="nc" id="L464">                    Scanner input = new Scanner(System.in);</span>
+
+                    try {
+<span class="nc" id="L467">                        System.out.print(&quot;Enter your choice: &quot;);</span>
+<span class="nc" id="L468">                        academicsChoice = scanner.nextInt();</span>
+<span class="nc" id="L469">                    } catch (InputMismatchException e) {</span>
+<span class="nc" id="L470">                        System.out.println(&quot;Invalid input type. Please enter an integer.&quot;);</span>
+<span class="nc" id="L471">                        scanner.nextLine(); // clear the scanner buffer</span>
+<span class="nc" id="L472">                    }</span>
+
+<span class="nc bnc" id="L474" title="All 10 branches missed.">                    switch (academicsChoice) {</span>
+                        case 1:
+
+<span class="nc" id="L477">                            System.out.print(&quot;Enter the course ID: &quot;);</span>
+<span class="nc" id="L478">                            int course_id = input.nextInt();</span>
+<span class="nc" id="L479">                            input.nextLine(); // Consume the new line character</span>
+
+<span class="nc" id="L481">                            System.out.print(&quot;Enter the course name: &quot;);</span>
+<span class="nc" id="L482">                            String course_name = input.nextLine();</span>
+
+<span class="nc" id="L484">                            System.out.print(&quot;Enter the credit structure: &quot;);</span>
+<span class="nc" id="L485">                            String credit_structure = input.nextLine();</span>
+
+<span class="nc" id="L487">                            Academics.case1(academicsChoice, course_id, course_name,</span>
+                                    credit_structure);
+
+<span class="nc" id="L490">                            App.main(args);</span>
+
+<span class="nc" id="L492">                            break;</span>
+                        case 2:
+<span class="nc" id="L494">                            System.out.println(&quot;You chose to delete a course from the course_catalog.&quot;);</span>
+<span class="nc" id="L495">                            System.out.print(&quot;Enter Course ID: &quot;);</span>
+<span class="nc" id="L496">                            int course_id2 = scanner.nextInt(); // use scanner.next() instead of</span>
+                                                                // scanner.nextLine()
+<span class="nc" id="L498">                            Academics.case2(course_id2);</span>
+
+<span class="nc" id="L500">                            App.main(args);</span>
+
+                            // perform delete course from course_catalog
+<span class="nc" id="L503">                            break;</span>
+                        case 3:
+<span class="nc" id="L505">                            System.out.println(&quot;You chose to show all courses.&quot;);</span>
+                            // Queries.show_Courses();
+<span class="nc" id="L507">                            Academics.case3();</span>
+
+<span class="nc" id="L509">                            App.main(args);</span>
+                            // perform show all courses
+<span class="nc" id="L511">                            break;</span>
+                        case 4:
+<span class="nc" id="L513">                            System.out.println(&quot;You chose to start the semester.&quot;);</span>
+<span class="nc" id="L514">                            Academics.case4();</span>
+<span class="nc" id="L515">                            App.main(args);</span>
+                            // perform start semester
+<span class="nc" id="L517">                            break;</span>
+                        case 5:
+<span class="nc" id="L519">                            System.out.println(&quot;You chose to end the semester.&quot;);</span>
+
+<span class="nc" id="L521">                            Academics.case5();</span>
+<span class="nc" id="L522">                            App.main(args);</span>
+                            // perform end semester
+<span class="nc" id="L524">                            break;</span>
+                        case 6:
+<span class="nc" id="L526">                            System.out.println(&quot;You chose to view the grades of students.&quot;);</span>
+<span class="nc" id="L527">                            System.out.print(&quot;Enter the email of the student: &quot;);</span>
+<span class="nc" id="L528">                            String email2 = scanner.next(); // use scanner.next() instead of scanner.nextLine()</span>
+                            // Queries.Show_Grades(email2);
+<span class="nc" id="L530">                            Academics.case6(email2);</span>
+
+<span class="nc" id="L532">                            App.main(args);</span>
+                            // perform view grades of students
+<span class="nc" id="L534">                            break;</span>
+                        case 7:
+<span class="nc" id="L536">                            System.out.print(&quot;Enter the Email: &quot;);</span>
+<span class="nc" id="L537">                            email = scanner.next();</span>
+<span class="nc" id="L538">                            Academics.gradcheck(email);</span>
+<span class="nc" id="L539">                            break;</span>
+                        case 8:
+<span class="nc" id="L541">                            System.out.print(&quot;Enter the Email: &quot;);</span>
+<span class="nc" id="L542">                            email = scanner.next();</span>
+<span class="nc" id="L543">                            Student.TranscriptGenerator(email);</span>
+<span class="nc" id="L544">                            break;</span>
+                        case 9:
+<span class="nc" id="L546">                            System.out.println(&quot;You chose to logout.&quot;);</span>
+<span class="nc" id="L547">                            Currentuser currentuser = new Currentuser();</span>
+<span class="nc" id="L548">                            currentuser.resetTokens();</span>
+<span class="nc" id="L549">                            App.main(null);</span>
+<span class="nc" id="L550">                            break;</span>
+                        default:
+<span class="nc" id="L552">                            System.out.println(&quot;Invalid choice!&quot;);</span>
+<span class="nc" id="L553">                            App.main(args);</span>
+                    }
+
+<span class="nc" id="L556">                    App.main(args);</span>
+<span class="nc" id="L557">                    input.close();</span>
+
+<span class="nc bnc" id="L559" title="All 2 branches missed.">                } else if (role.equals(&quot;student&quot;)) {</span>
+<span class="nc" id="L560">                    int studentsChoice = 0;</span>
+
+<span class="nc" id="L562">                    System.out.println(&quot;Students Menu&quot;);</span>
+<span class="nc" id="L563">                    System.out.println(&quot;1. Register for a course&quot;);</span>
+<span class="nc" id="L564">                    System.out.println(&quot;2. Deregister for a course.&quot;);</span>
+<span class="nc" id="L565">                    System.out.println(&quot;3. View my grades.&quot;);</span>
+<span class="nc" id="L566">                    System.out.println(&quot;4. Update Profile&quot;);</span>
+<span class="nc" id="L567">                    System.out.println(&quot;5. Change Password&quot;);</span>
+<span class="nc" id="L568">                    System.out.println(&quot;6. Logout.&quot;);</span>
+                    try {
+<span class="nc" id="L570">                        System.out.print(&quot;Enter your choice: &quot;);</span>
+<span class="nc" id="L571">                        studentsChoice = scanner.nextInt();</span>
+<span class="nc" id="L572">                    } catch (InputMismatchException e) {</span>
+<span class="nc" id="L573">                        System.out.println(&quot;Invalid input type. Please enter an integer.&quot;);</span>
+<span class="nc" id="L574">                        scanner.nextLine(); // clear the scanner buffer</span>
+<span class="nc" id="L575">                    }</span>
+
+<span class="nc bnc" id="L577" title="All 7 branches missed.">                    switch (studentsChoice) {</span>
+                        case 1:
+<span class="nc" id="L579">                            System.out.println(&quot;Performing course registration...&quot;);</span>
+<span class="nc" id="L580">                            System.out.println(&quot;Enter Course ID: &quot;);</span>
+<span class="nc" id="L581">                            int course_id = scanner.nextInt();</span>
+<span class="nc" id="L582">                            Currentuser c = new Currentuser();</span>
+<span class="nc" id="L583">                            email = c.getEmail();</span>
+<span class="nc" id="L584">                            Student.case1(course_id, email);</span>
+<span class="nc" id="L585">                            App.main(null);</span>
+                            // perform register for a course
+<span class="nc" id="L587">                            break;</span>
+                        case 2:
+<span class="nc" id="L589">                            System.out.println(&quot;Performing course deregistration...&quot;);</span>
+<span class="nc" id="L590">                            course_id = scanner.nextInt();</span>
+<span class="nc" id="L591">                            Student.case2(course_id);</span>
+<span class="nc" id="L592">                            App.main(null);</span>
+                            // perform deregister for a course
+<span class="nc" id="L594">                            break;</span>
+                        case 3:
+<span class="nc" id="L596">                            System.out.println(&quot;Performing view grades...&quot;);</span>
+<span class="nc" id="L597">                            c = new Currentuser();</span>
+<span class="nc" id="L598">                            String email2 = c.getEmail();</span>
+                            // Queries.Show_Grades(email2);
+<span class="nc" id="L600">                            Student.case3(email2);</span>
+<span class="nc" id="L601">                            App.main(null);</span>
+                            // perform view my grades
+<span class="nc" id="L603">                            break;</span>
+                        case 4:
+<span class="nc" id="L605">                            System.out.println(&quot;Performing profile update...&quot;);</span>
+<span class="nc" id="L606">                            c = new Currentuser();</span>
+<span class="nc" id="L607">                            email = c.getEmail();</span>
+<span class="nc" id="L608">                            System.out.print(&quot;Enter the address: &quot;);</span>
+<span class="nc" id="L609">                            String address = scanner.next();</span>
+<span class="nc" id="L610">                            scanner.nextLine();</span>
+<span class="nc" id="L611">                            System.out.print(&quot;Enter the phone: &quot;);</span>
+<span class="nc" id="L612">                            String phone = scanner.nextLine();</span>
+<span class="nc" id="L613">                            Student.case4(address, phone, email);</span>
+                            // Queries.UpdateUserDetails(address, phone, email);
+<span class="nc" id="L615">                            App.main(null);</span>
+<span class="nc" id="L616">                            break;</span>
+                        case 5:
+<span class="nc" id="L618">                            System.out.println(&quot;Performing password change...&quot;);</span>
+<span class="nc" id="L619">                            System.out.print(&quot;Enter new Password: &quot;);</span>
+<span class="nc" id="L620">                            String password = scanner.next();</span>
+<span class="nc" id="L621">                            Student.case5(password);</span>
+<span class="nc" id="L622">                            App.main(null);</span>
+                            // perform change password
+<span class="nc" id="L624">                            break;</span>
+                        case 6:
+<span class="nc" id="L626">                            System.out.println(&quot;Performing logout...&quot;);</span>
+<span class="nc" id="L627">                            Student.case6();</span>
+
+<span class="nc" id="L629">                            System.out.println(&quot;Logged out successfully!&quot;);</span>
+<span class="nc" id="L630">                            Currentuser currentuser = new Currentuser();</span>
+<span class="nc" id="L631">                            currentuser.resetTokens();</span>
+<span class="nc" id="L632">                            App.main(args);</span>
+
+                        default:
+<span class="nc" id="L635">                            System.out.println(&quot;Invalid choice!&quot;);</span>
+<span class="nc" id="L636">                            App.main(null);</span>
+                    }
+
+<span class="nc" id="L639">                    App.main(args);</span>
+
+<span class="nc bnc" id="L641" title="All 2 branches missed.">                } else if (role.equals(&quot;instructor&quot;)) {</span>
+<span class="nc" id="L642">                    int instructorsChoice = 0;</span>
+
+<span class="nc" id="L644">                    System.out.println(&quot;Instructors Menu&quot;);</span>
+<span class="nc" id="L645">                    System.out.println(&quot;1. Add a grade for a student&quot;);</span>
+<span class="nc" id="L646">                    System.out.println(&quot;2. Update grade of a student.&quot;);</span>
+<span class="nc" id="L647">                    System.out.println(&quot;3. View my courses.&quot;);</span>
+<span class="nc" id="L648">                    System.out.println(&quot;4. Update Profile&quot;);</span>
+<span class="nc" id="L649">                    System.out.println(&quot;5. Change Password&quot;);</span>
+<span class="nc" id="L650">                    System.out.println(&quot;6. Logout.&quot;);</span>
+
+                    try {
+<span class="nc" id="L653">                        System.out.print(&quot;Enter your choice: &quot;);</span>
+<span class="nc" id="L654">                        instructorsChoice = scanner.nextInt();</span>
+<span class="nc" id="L655">                    } catch (InputMismatchException e) {</span>
+<span class="nc" id="L656">                        System.out.println(&quot;Invalid input type. Please enter an integer.&quot;);</span>
+<span class="nc" id="L657">                        scanner.nextLine(); // clear the scanner buffer</span>
+<span class="nc" id="L658">                    }</span>
+
+<span class="nc bnc" id="L660" title="All 7 branches missed.">                    switch (instructorsChoice) {</span>
+                        case 1:
+<span class="nc" id="L662">                            System.out.println(&quot;Add a grade for a student&quot;);</span>
+<span class="nc" id="L663">                            System.out.print(&quot;Enter Student's Email: &quot;);</span>
+<span class="nc" id="L664">                            email = scanner.next();</span>
+<span class="nc" id="L665">                            System.out.print(&quot;Enter Student's course id: &quot;);</span>
+<span class="nc" id="L666">                            int course_id = scanner.nextInt();</span>
+<span class="nc" id="L667">                            System.out.print(&quot;Enter Student's grade: &quot;);</span>
+<span class="nc" id="L668">                            int grade = scanner.nextInt();</span>
+
+<span class="nc" id="L670">                            String selectQuery = &quot;SELECT curr_sem FROM students&quot;;</span>
+<span class="nc" id="L671">                            ResultSet rs = stmt.executeQuery(selectQuery);</span>
+<span class="nc" id="L672">                            int curr_sem = 0;</span>
+                            // Process the results
+<span class="nc bnc" id="L674" title="All 2 branches missed.">                            if (rs.next()) {</span>
+<span class="nc" id="L675">                                curr_sem = rs.getInt(&quot;curr_sem&quot;);</span>
+<span class="nc" id="L676">                                System.out.println(&quot;Current Semester: &quot; + curr_sem);</span>
+                            }
+
+<span class="nc" id="L679">                            Instructor.case1(email, course_id, curr_sem, grade);</span>
+
+<span class="nc" id="L681">                            App.main(null);</span>
+<span class="nc" id="L682">                            break;</span>
+                        case 2:
+<span class="nc" id="L684">                            System.out.println(&quot;Update grade of a student&quot;);</span>
+<span class="nc" id="L685">                            System.out.print(&quot;Enter Student's Email: &quot;);</span>
+<span class="nc" id="L686">                            email = scanner.next();</span>
+<span class="nc" id="L687">                            System.out.print(&quot;Enter Student's course id: &quot;);</span>
+<span class="nc" id="L688">                            course_id = scanner.nextInt();</span>
+<span class="nc" id="L689">                            System.out.print(&quot;Enter Student's grade: &quot;);</span>
+<span class="nc" id="L690">                            grade = scanner.nextInt();</span>
+
+<span class="nc" id="L692">                            selectQuery = &quot;SELECT curr_sem FROM students&quot;;</span>
+<span class="nc" id="L693">                            rs = stmt.executeQuery(selectQuery);</span>
+<span class="nc" id="L694">                            curr_sem = 0;</span>
+                            // Process the results
+<span class="nc bnc" id="L696" title="All 2 branches missed.">                            if (rs.next()) {</span>
+<span class="nc" id="L697">                                curr_sem = rs.getInt(&quot;curr_sem&quot;);</span>
+<span class="nc" id="L698">                                System.out.println(&quot;Current Semester: &quot; + curr_sem);</span>
+                            }
+
+<span class="nc" id="L701">                            Instructor.case1(email, course_id, curr_sem, grade);</span>
+<span class="nc" id="L702">                            rs.close();</span>
+<span class="nc" id="L703">                            App.main(null);</span>
+<span class="nc" id="L704">                            break;</span>
+                        case 3:
+<span class="nc" id="L706">                            System.out.println(&quot;View my courses&quot;);</span>
+<span class="nc" id="L707">                            Currentuser c = new Currentuser();</span>
+<span class="nc" id="L708">                            email = c.getEmail();</span>
+<span class="nc" id="L709">                            Instructor.case3(email);</span>
+<span class="nc" id="L710">                            App.main(null);</span>
+<span class="nc" id="L711">                            break;</span>
+                        case 4:
+<span class="nc" id="L713">                            System.out.println(&quot;Update profile&quot;);</span>
+<span class="nc" id="L714">                            c = new Currentuser();</span>
+<span class="nc" id="L715">                            email = c.getEmail();</span>
+<span class="nc" id="L716">                            System.out.print(&quot;Enter the address: &quot;);</span>
+<span class="nc" id="L717">                            String address = scanner.next();</span>
+<span class="nc" id="L718">                            scanner.nextLine();</span>
+<span class="nc" id="L719">                            System.out.print(&quot;Enter the phone: &quot;);</span>
+<span class="nc" id="L720">                            String phone = scanner.nextLine();</span>
+<span class="nc" id="L721">                            Student.case4(address, phone, email);</span>
+<span class="nc" id="L722">                            App.main(null);</span>
+<span class="nc" id="L723">                            break;</span>
+                        case 5:
+<span class="nc" id="L725">                            System.out.println(&quot;Change password&quot;);</span>
+<span class="nc" id="L726">                            System.out.print(&quot;Enter new Password: &quot;);</span>
+<span class="nc" id="L727">                            String password = scanner.next();</span>
+<span class="nc" id="L728">                            Instructor.case5(password);</span>
+<span class="nc" id="L729">                            App.main(null);</span>
+<span class="nc" id="L730">                            break;</span>
+                        case 6:
+<span class="nc" id="L732">                            Currentuser currentuser = new Currentuser();</span>
+<span class="nc" id="L733">                            currentuser.resetTokens();</span>
+<span class="nc" id="L734">                            App.main(null);</span>
+<span class="nc" id="L735">                            break;</span>
+                        default:
+<span class="nc" id="L737">                            System.out.println(&quot;Invalid choice!&quot;);</span>
+<span class="nc" id="L738">                            App.main(null);</span>
+                    }
+
+                }
+            }
+
+<span class="nc" id="L744">            scanner.close();</span>
+
+<span class="nc" id="L746">        } catch (SQLException se) {</span>
+<span class="nc" id="L747">            se.printStackTrace();</span>
+<span class="nc" id="L748">        } catch (Exception e) {</span>
+<span class="nc" id="L749">            e.printStackTrace();</span>
+        } finally {
+            try {
+<span class="nc bnc" id="L752" title="All 2 branches missed.">                if (stmt != null)</span>
+<span class="nc" id="L753">                    stmt.close();</span>
+<span class="nc" id="L754">            } catch (SQLException se2) {</span>
+<span class="nc" id="L755">            }</span>
+            try {
+<span class="nc bnc" id="L757" title="All 2 branches missed.">                if (conn != null)</span>
+<span class="nc" id="L758">                    conn.close();</span>
+<span class="nc" id="L759">            } catch (SQLException se) {</span>
+<span class="nc" id="L760">                se.printStackTrace();</span>
+<span class="nc" id="L761">            }</span>
+
+        }
+
+<span class="nc" id="L765">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
